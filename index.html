@@ -232,32 +232,70 @@ footer{
 </section>
 
 <!-- CONTENT -->
-<div class="container">
-
-  <!-- CARD SAMPLE -->
-  <div class="card">
-
-    <h3>Bukan Urusan Mata Manusia</h3>
-
-    <small>✍️ Omguru | Puisi</small>
-
-    <p class="isi">
-aku memang hina
-
-ditimbangan manusia
-
-tapi belum tentu
-dihadapan Tuhan
-    </p>
-
-  </div>
-
+<div class="container" id="karyaList">
+  <p>⏳ Memuat karya...</p>
 </div>
 
 <!-- FOOTER -->
 <footer>
   © 2026 CORENG • Ruang Literasi Sekolah
 </footer>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycby_M2P-eeuDh4cNIaeNi-WmfKEKLvsHSmHx5Meva-bysSMtIEElRXP5hUmK1mLC1sBRqw/exec";
+
+fetch(API_URL)
+  .then(res => res.json())
+  .then(data => {
+
+    const container = document.getElementById("karyaList");
+    container.innerHTML = "";
+
+    // Filter hanya yang Publish
+    const publishData = data.filter(d => d.status === "Publish");
+
+    if (publishData.length === 0) {
+      container.innerHTML = "<p>Belum ada karya.</p>";
+      return;
+    }
+
+    publishData.reverse().forEach(item => {
+
+      const card = document.createElement("div");
+      card.className = "card";
+
+      card.innerHTML = `
+        <h3>${item.judul}</h3>
+
+        <small>✍️ ${item.nama} | ${item.jenis}</small>
+
+        <p class="isi">${item.isi}</p>
+      `;
+
+      // Kalau ada link media
+      if(item.link){
+        if(item.link.includes("youtube")){
+          card.innerHTML += `
+            <iframe src="${item.link.replace("watch?v=","embed/")}"></iframe>
+          `;
+        } else {
+          card.innerHTML += `
+            <img src="${item.link}">
+          `;
+        }
+      }
+
+      container.appendChild(card);
+
+    });
+
+  })
+  .catch(err => {
+    console.error(err);
+    document.getElementById("karyaList").innerHTML =
+      "<p>❌ Gagal memuat data.</p>";
+  });
+</script>
 
 </body>
 </html>
