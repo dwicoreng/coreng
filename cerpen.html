@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CORENG | Cerpen</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+
+/* WARNA */
+:root{
+  --dark:#2b1d12;
+  --brown:#4b2e1a;
+  --gold:#d4b06a;
+  --cream:#fbf7f2;
+}
+
+/* BODY */
+body{
+  margin:0;
+  font-family:"Georgia",serif;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,0.03) 0px,
+      rgba(255,255,255,0.03) 2px,
+      rgba(0,0,0,0.04) 4px,
+      rgba(0,0,0,0.04) 6px
+    ),
+    repeating-linear-gradient(
+      45deg,
+      rgba(0,0,0,0.03) 0px,
+      rgba(0,0,0,0.03) 1px,
+      transparent 2px,
+      transparent 6px
+    ),
+    linear-gradient(
+      to bottom,
+      #3a2615,
+      #4a311c,
+      #5a3f26
+    );
+
+  color:#f3e9d7;
+  min-height:100vh;
+}
+
+/* HEADER */
+header{
+  background:linear-gradient(135deg,#1c1917,#44403c);
+  color:white;
+  padding:25px 20px;
+}
+
+.header-box{
+  max-width:1100px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.logo{
+  font-family:'Merriweather',serif;
+  font-size:26px;
+  letter-spacing:2px;
+}
+
+/* NAV */
+nav ul{
+  list-style:none;
+  display:flex;
+  gap:22px;
+  margin:0;
+  padding:0;
+}
+
+nav a{
+  text-decoration:none;
+  color:white;
+  font-size:14px;
+  letter-spacing:1px;
+  transition:0.3s;
+}
+
+nav a:hover{
+  color:var(--gold);
+}
+
+/* HERO */
+.hero{
+  background:linear-gradient(135deg,#2b1d12,#4b2e1a);
+  position:relative;
+  height:180px;
+}
+
+.hero::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:rgba(43,29,18,0.65);
+}
+
+.hero-text{
+  position:relative;
+  z-index:2;
+  max-width:900px;
+  margin:auto;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  color:#fbf7f2;
+  padding:20px;
+}
+
+.hero-text h1{
+  margin:0;
+  font-size:32px;
+}
+
+/* CONTAINER */
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:40px 15px;
+}
+
+/* CARD */
+.card{
+  background:linear-gradient(to bottom,#fffaf3,#fdf6eb);
+  border-radius:12px;
+  padding:25px;
+  margin-bottom:25px;
+  border-left:5px solid var(--gold);
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
+  transition:0.3s;
+}
+
+.card:hover{
+  transform:translateY(-3px);
+}
+
+.card h3{
+  margin:0;
+  font-family:'Merriweather',serif;
+  color:#292524;
+}
+
+.card small{
+  display:block;
+  margin:8px 0 15px;
+  color:#78716c;
+}
+
+.isi{
+  line-height:1.9;
+  font-size:16px;
+  white-space:pre-line;
+  color:#292524;
+}
+
+/* FOOTER */
+footer{
+  background:#1c1917;
+  color:#a8a29e;
+  text-align:center;
+  padding:25px 15px;
+  font-size:14px;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+
+  .header-box{
+    flex-direction:column;
+    gap:15px;
+  }
+
+  nav ul{
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+
+  .hero-text h1{
+    font-size:26px;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-box">
+
+    <div class="logo">CORENG</div>
+
+    <nav>
+      <ul>
+        <li><a href="index.html">Beranda</a></li>
+        <li><a href="puisi.html">Puisi</a></li>
+        <li><a href="cerpen.html">Cerpen</a></li>
+        <li><a href="likhati.html">Likhati</a></li>
+        <li><a href="kirim.html">Kirim Karya</a></li>
+      </ul>
+    </nav>
+
+  </div>
+</header>
+
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+
+    <h1>Kumpulan Cerpen Siswa</h1>
+    <p>Kisah, imajinasi, dan refleksi kehidupan.</p>
+
+  </div>
+</section>
+
+
+<!-- CONTENT -->
+<div class="container" id="karya">
+  Memuat cerpen...
+</div>
+
+
+<!-- FOOTER -->
+<footer>
+  © 2026 CORENG • Ruang Literasi Sekolah
+</footer>
+
+
+<script>
+
+/* GANTI DENGAN URL SCRIPT ANDA */
+const API_URL =
+"https://script.google.com/macros/s/AKfycbxO_9dYRSwmXz8MUXPOn4gmQU2X2tQzRFWzwjfaPZc5CmXL7dZ042Qs_DNKGJ9z9Nq9/exec";
+
+
+fetch(API_URL)
+.then(res => res.json())
+.then(data => {
+
+  const cerpen = data.filter(d => d.Jenis === "Cerpen");
+
+  tampilkan(cerpen);
+
+})
+.catch(err => {
+
+  document.getElementById("karya").innerHTML =
+    "❌ Gagal memuat data";
+
+  console.error(err);
+
+});
+
+
+function tampilkan(data){
+
+  const div = document.getElementById("karya");
+
+  div.innerHTML = "";
+
+  if(data.length === 0){
+    div.innerHTML = "Belum ada cerpen.";
+    return;
+  }
+
+  data.reverse().forEach(d => {
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <h3>${d.Judul}</h3>
+
+      <small>
+        ✍️ ${d.Nama}
+      </small>
+
+      <p class="isi">${d.Isi}</p>
+    `;
+
+    div.appendChild(card);
+
+  });
+
+}
+
+</script>
+
+</body>
+</html>
