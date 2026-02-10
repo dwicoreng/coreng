@@ -102,6 +102,11 @@ footer{
   color:#555;
   font-size:14px;
 }
+.isi{
+  line-height:1.9;
+  white-space:pre-line;
+  font-size:16px;
+}
 
 </style>
 </head>
@@ -141,7 +146,13 @@ footer{
 
 
 <script>
+function formatPuisi(text){
 
+  if(!text) return "";
+
+  return text.replace(/\n/g, "<br>");
+
+}
 // ===============================
 // GANTI DENGAN URL ANDA
 // ===============================
@@ -189,14 +200,14 @@ function tampilkan(data){
     card.className = isLikhati ? "card likhati" : "card";
 
     card.innerHTML = `
-      <h3>${d.Judul}</h3>
+  <h3>${d.Judul}</h3>
 
-      <small>
-        ✍️ ${d.Nama} | ${d.Jenis}
-      </small>
+  <small>
+    ✍️ ${d.Nama} | ${d.Jenis}
+  </small>
 
-      <p>${d.Isi}</p>
-    `;
+  <p class="isi">${formatPuisi(d.Isi)}</p>
+`;
 
     // MEDIA
     if(d.Media){
@@ -264,6 +275,16 @@ function aktifkanFilter(){
 
   search.addEventListener("input", update);
   filter.addEventListener("change", update);
+}
+
+
+// FORMAT PUISI
+function formatPuisi(text){
+
+  if(!text) return "";
+
+  return text.replace(/\n/g, "<br>");
+
 }
 
 </script>
