@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Kirim Karya | CORENG</title>
+
+<style>
+
+body{
+  font-family: Arial, sans-serif;
+  background:#f5f7fa;
+  margin:0;
+}
+
+header{
+  background:#1e40af;
+  color:white;
+  padding:20px;
+  text-align:center;
+}
+
+.container{
+  max-width:600px;
+  margin:auto;
+  padding:20px;
+}
+
+form{
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+
+label{
+  display:block;
+  margin-top:12px;
+  font-weight:bold;
+}
+
+input, select, textarea{
+  width:100%;
+  padding:8px;
+  margin-top:5px;
+  border-radius:6px;
+  border:1px solid #ccc;
+  font-size:14px;
+}
+
+textarea{
+  min-height:150px;
+  resize:vertical;
+}
+
+button{
+  background:#1e40af;
+  color:white;
+  border:none;
+  padding:10px;
+  margin-top:15px;
+  width:100%;
+  border-radius:6px;
+  font-size:16px;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#1e3a8a;
+}
+
+.info{
+  font-size:13px;
+  color:#555;
+  margin-top:10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+  <h2>Kirim Karya Siswa</h2>
+  <p>CORENG - Ruang Literasi</p>
+</header>
+
+<div class="container">
+
+<form id="karyaForm">
+
+  <label>Nama Siswa</label>
+  <input type="text" id="nama" required>
+
+  <label>Jenis Karya</label>
+  <select id="jenis" required>
+    <option value="">-- Pilih --</option>
+    <option>Puisi</option>
+    <option>Cerpen</option>
+    <option>Cerbung</option>
+    <option>Likhati</option>
+  </select>
+
+  <label>Judul</label>
+  <input type="text" id="judul" required>
+
+  <label>Isi Karya / Puisi</label>
+  <textarea id="isi" placeholder="Tulis puisimu di sini..." required></textarea>
+
+  <label>Link Foto / Video (Opsional)</label>
+  <input type="url" id="media" placeholder="https://...">
+
+  <button type="submit">📤 Kirim Karya</button>
+
+  <div class="info">
+    Karya akan direview guru sebelum dipublish.
+  </div>
+
+</form>
+
+</div>
+
+
+<script>
+
+// GANTI dengan URL Apps Script Anda
+const API_URL = "https://script.google.com/macros/s/AKfycbxO_9dYRSwmXz8MUXPOn4gmQU2X2tQzRFWzwjfaPZc5CmXL7dZ042Qs_DNKGJ9z9Nq9/exec";
+
+
+document.getElementById("karyaForm")
+.addEventListener("submit", function(e){
+
+  e.preventDefault();
+
+  const data = {
+    nama: document.getElementById("nama").value,
+    jenis: document.getElementById("jenis").value,
+    judul: document.getElementById("judul").value,
+    isi: document.getElementById("isi").value,
+    media: document.getElementById("media").value
+  };
+
+  fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify(data)
+  })
+  .then(r => r.text())
+  .then(res => {
+
+    alert("✅ Karya berhasil dikirim!");
+    this.reset();
+
+  })
+  .catch(err => {
+
+    alert("❌ Gagal mengirim");
+    console.error(err);
+
+  });
+
+});
+</script>
+
+</body>
+</html>

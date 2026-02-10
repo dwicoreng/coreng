@@ -17,8 +17,13 @@ body{
 header{
   background:#1e40af;
   color:white;
-  padding:20px;
+  padding:25px;
   text-align:center;
+}
+
+header h1{
+  margin:0;
+  font-size:32px;
 }
 
 .container{
@@ -27,12 +32,32 @@ header{
   padding:20px;
 }
 
+/* FILTER */
+.filter-box{
+  display:flex;
+  gap:10px;
+  margin-bottom:20px;
+}
+
+.filter-box input,
+.filter-box select{
+  padding:8px;
+  border-radius:6px;
+  border:1px solid #ccc;
+  font-size:14px;
+}
+
+.filter-box input{
+  flex:1;
+}
+
+/* CARD */
 .card{
   background:white;
   border-radius:10px;
   padding:15px;
   margin-bottom:20px;
-  box-shadow:0 2px 5px rgba(0,0,0,0.1);
+  box-shadow:0 2px 6px rgba(0,0,0,0.1);
 }
 
 .card h3{
@@ -42,20 +67,40 @@ header{
 
 .card small{
   color:gray;
+  display:block;
+  margin-top:5px;
+}
+
+.card p{
+  line-height:1.6;
+  white-space:pre-line;
 }
 
 img{
   width:100%;
   border-radius:8px;
-  margin-top:10px;
+  margin-top:12px;
 }
 
 iframe{
   width:100%;
   height:300px;
-  margin-top:10px;
+  margin-top:12px;
   border-radius:8px;
   border:none;
+}
+
+/* Likhati */
+.likhati{
+  border-left:6px solid #16a34a;
+  background:#f0fdf4;
+}
+
+footer{
+  text-align:center;
+  padding:15px;
+  color:#555;
+  font-size:14px;
 }
 
 </style>
@@ -64,55 +109,94 @@ iframe{
 <body>
 
 <header>
-<h1>CORENG</h1>
-<p>Ruang Kreasi & Literasi Siswa</p>
+  <h1>CORENG</h1>
+  <p>Ruang Kreasi & Literasi Siswa</p>
 </header>
 
-<div class="container" id="karya">
-Loading...
+<div class="container">
+
+  <!-- FILTER -->
+  <div class="filter-box">
+    <input type="text" id="searchInput" placeholder="Cari judul / nama...">
+
+    <select id="filterJenis">
+      <option value="all">Semua</option>
+      <option value="Puisi">Puisi</option>
+      <option value="Cerpen">Cerpen</option>
+      <option value="Cerbung">Cerbung</option>
+      <option value="Likhati">Likhati</option>
+    </select>
+  </div>
+
+  <!-- KARYA -->
+  <div id="karya">
+    Loading karya...
+  </div>
+
 </div>
+
+<footer>
+  © 2026 CORENG | Ruang Literasi Digital
+</footer>
 
 
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycbxe_-8J8b9ermREogA2GIfeiU0sBdVlFSuc7W4XlbgILa79Arx41ppZEK8FXrh2Lere/exec";
+// ===============================
+// GANTI DENGAN URL ANDA
+// ===============================
+const API_URL = "https://script.google.com/macros/s/AKfycbxO_9dYRSwmXz8MUXPOn4gmQU2X2tQzRFWzwjfaPZc5CmXL7dZ042Qs_DNKGJ9z9Nq9/exec";
+
+
+let allData = [];
 
 
 fetch(API_URL)
 .then(res => res.json())
-.then(data => tampilkan(data))
+.then(data => {
+
+  allData = data;
+  tampilkan(data);
+  aktifkanFilter();
+
+})
 .catch(err => {
+
   document.getElementById("karya").innerHTML =
-    "Gagal memuat data";
+    "❌ Gagal memuat data";
+
   console.error(err);
 });
 
 
+// TAMPILKAN DATA
 function tampilkan(data){
 
   const div = document.getElementById("karya");
-
   div.innerHTML = "";
 
-  if(data.length === 0){
+  if(!data || data.length === 0){
     div.innerHTML = "Belum ada karya.";
     return;
   }
 
-  data.reverse().forEach(d => {
+  data.slice().reverse().forEach(d => {
+
+    const isLikhati = d.Jenis === "Likhati";
 
     const card = document.createElement("div");
-    card.className = "card";
+
+    card.className = isLikhati ? "card likhati" : "card";
 
     card.innerHTML = `
       <h3>${d.Judul}</h3>
+
       <small>
         ✍️ ${d.Nama} | ${d.Jenis}
       </small>
 
       <p>${d.Isi}</p>
     `;
-
 
     // MEDIA
     if(d.Media){
@@ -132,7 +216,7 @@ function tampilkan(data){
 
       }
 
-      // Gambar
+      // GAMBAR
       else{
 
         const img = document.createElement("img");
@@ -144,15 +228,45 @@ function tampilkan(data){
 
     }
 
-
     div.appendChild(card);
 
   });
 
 }
 
+
+// FILTER + SEARCH
+function aktifkanFilter(){
+
+  const search = document.getElementById("searchInput");
+  const filter = document.getElementById("filterJenis");
+
+  function update(){
+
+    const keyword = search.value.toLowerCase();
+    const jenis = filter.value;
+
+    const hasil = allData.filter(d => {
+
+      const cocokCari =
+        d.Judul.toLowerCase().includes(keyword) ||
+        d.Nama.toLowerCase().includes(keyword);
+
+      const cocokJenis =
+        jenis === "all" || d.Jenis === jenis;
+
+      return cocokCari && cocokJenis;
+
+    });
+
+    tampilkan(hasil);
+  }
+
+  search.addEventListener("input", update);
+  filter.addEventListener("change", update);
+}
+
 </script>
 
 </body>
 </html>
-
