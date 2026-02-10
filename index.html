@@ -3,109 +3,195 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CORENG | Ruang Literasi</title>
 
-<title>CORENG | Ruang Kreasi Siswa</title>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 
+:root{
+  --dark:#2b1d12;      /* coklat tua kayu */
+  --brown:#4b2e1a;     /* coklat batang */
+  --gold:#d4b06a;      /* emas lembut */
+  --cream:#fbf7f2;     /* kertas tua */
+}
+
 body{
-  font-family: Arial, sans-serif;
-  background:#f5f7fa;
-  margin:0;
+  margin: 0;
+  font-family: "Georgia", serif;
+
+  background:
+    /* Serat kayu */
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,0.03) 0px,
+      rgba(255,255,255,0.03) 2px,
+      rgba(0,0,0,0.04) 4px,
+      rgba(0,0,0,0.04) 6px
+    ),
+
+    /* Retakan halus */
+    repeating-linear-gradient(
+      45deg,
+      rgba(0,0,0,0.03) 0px,
+      rgba(0,0,0,0.03) 1px,
+      transparent 2px,
+      transparent 6px
+    ),
+
+    /* Warna dasar kayu/kertas tua */
+    linear-gradient(
+      to bottom,
+      #3a2615,
+      #4a311c,
+      #5a3f26
+    );
+
+  color: #f3e9d7;
+  min-height: 100vh;
 }
 
+/* HEADER */
 header{
-  background:#1e40af;
+  background:linear-gradient(135deg,#1c1917,#44403c);
   color:white;
-  padding:25px;
-  text-align:center;
+  padding:30px 20px;
 }
 
-header h1{
+.header-box{
+  max-width:1100px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.logo{
+  font-family:'Merriweather',serif;
+  font-size:28px;
+  letter-spacing:2px;
+}
+
+/* NAV */
+nav ul{
+  list-style:none;
+  display:flex;
+  gap:25px;
   margin:0;
-  font-size:32px;
+  padding:0;
 }
 
-.container{
+nav a{
+  text-decoration:none;
+  color:white;
+  font-size:14px;
+  letter-spacing:1px;
+  transition:0.3s;
+}
+
+nav a:hover{
+  color:var(--gold);
+}
+
+/* HERO */
+.hero{
+  background:linear-gradient(135deg,#2b1d12,#4b2e1a);
+  position:relative;
+  height:220px;
+}
+
+.hero::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:rgba(43,29,18,0.65);
+}
+
+.hero-text{
+  position:relative;
+  z-index:2;
   max-width:900px;
   margin:auto;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  color:#fbf7f2;
   padding:20px;
 }
 
-/* FILTER */
-.filter-box{
-  display:flex;
-  gap:10px;
-  margin-bottom:20px;
+.hero-text h1{
+  font-family:'Merriweather',serif;
+  margin:0;
+  font-size:34px;
 }
 
-.filter-box input,
-.filter-box select{
-  padding:8px;
-  border-radius:6px;
-  border:1px solid #ccc;
-  font-size:14px;
+.hero-text p{
+  max-width:600px;
+  opacity:0.9;
 }
 
-.filter-box input{
-  flex:1;
+/* CONTAINER */
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:40px 15px;
 }
 
 /* CARD */
 .card{
   background:white;
-  border-radius:10px;
-  padding:15px;
-  margin-bottom:20px;
-  box-shadow:0 2px 6px rgba(0,0,0,0.1);
+  border-radius:12px;
+  padding:25px;
+  margin-bottom:25px;
+  border-left:5px solid var(--gold);
+  box-shadow:0 5px 15px rgba(0,0,0,0.08);
 }
 
 .card h3{
   margin:0;
-  color:#1e40af;
+  font-family:'Merriweather',serif;
+  color:#292524;
 }
 
 .card small{
-  color:gray;
   display:block;
-  margin-top:5px;
+  margin:8px 0 15px;
+  color:#78716c;
 }
 
-.card p{
-  line-height:1.6;
-  white-space:pre-line;
-}
-
-img{
-  width:100%;
-  border-radius:8px;
-  margin-top:12px;
-}
-
-iframe{
-  width:100%;
-  height:300px;
-  margin-top:12px;
-  border-radius:8px;
-  border:none;
-}
-
-/* Likhati */
-.likhati{
-  border-left:6px solid #16a34a;
-  background:#f0fdf4;
-}
-
-footer{
-  text-align:center;
-  padding:15px;
-  color:#555;
-  font-size:14px;
-}
 .isi{
   line-height:1.9;
-  white-space:pre-line;
   font-size:16px;
+  white-space:pre-line;
+}
+
+/* FOOTER */
+footer{
+  background:#1c1917;
+  color:#a8a29e;
+  text-align:center;
+  padding:25px 15px;
+  font-size:14px;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+
+  .header-box{
+    flex-direction:column;
+    gap:15px;
+  }
+
+  nav ul{
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+
+  .hero-text h1{
+    font-size:28px;
+  }
+
 }
 
 </style>
@@ -113,181 +199,65 @@ footer{
 
 <body>
 
+<!-- HEADER -->
 <header>
-  <h1>CORENG</h1>
-  <p>Ruang Kreasi & Literasi Siswa</p>
+  <div class="header-box">
+
+    <div class="logo">CORENG</div>
+
+    <nav>
+      <ul>
+        <li><a href="index.html">Beranda</a></li>
+        <li><a href="puisi.html">Puisi</a></li>
+        <li><a href="cerpen.html">Cerpen</a></li>
+        <li><a href="likhati.html">Likhati</a></li>
+        <li><a href="kirim.html">Kirim Karya</a></li>
+      </ul>
+    </nav>
+
+  </div>
 </header>
 
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+
+    <h1>Ruang Literasi Digital</h1>
+    <p>
+      Wadah ekspresi, refleksi, dan kreativitas siswa
+      dalam bentuk puisi, cerita, dan visual sastra.
+    </p>
+
+  </div>
+</section>
+
+<!-- CONTENT -->
 <div class="container">
 
-  <!-- FILTER -->
-  <div class="filter-box">
-    <input type="text" id="searchInput" placeholder="Cari judul / nama...">
+  <!-- CARD SAMPLE -->
+  <div class="card">
 
-    <select id="filterJenis">
-      <option value="all">Semua</option>
-      <option value="Puisi">Puisi</option>
-      <option value="Cerpen">Cerpen</option>
-      <option value="Cerbung">Cerbung</option>
-      <option value="Likhati">Likhati</option>
-    </select>
-  </div>
+    <h3>Bukan Urusan Mata Manusia</h3>
 
-  <!-- KARYA -->
-  <div id="karya">
-    Loading karya...
+    <small>✍️ Omguru | Puisi</small>
+
+    <p class="isi">
+aku memang hina
+
+ditimbangan manusia
+
+tapi belum tentu
+dihadapan Tuhan
+    </p>
+
   </div>
 
 </div>
 
+<!-- FOOTER -->
 <footer>
-  © 2026 CORENG | Ruang Literasi Digital
+  © 2026 CORENG • Ruang Literasi Sekolah
 </footer>
-
-
-<script>
-function formatPuisi(text){
-
-  if(!text) return "";
-
-  return text.replace(/\n/g, "<br>");
-
-}
-// ===============================
-// GANTI DENGAN URL ANDA
-// ===============================
-const API_URL = "https://script.google.com/macros/s/AKfycbxO_9dYRSwmXz8MUXPOn4gmQU2X2tQzRFWzwjfaPZc5CmXL7dZ042Qs_DNKGJ9z9Nq9/exec";
-
-
-let allData = [];
-
-
-fetch(API_URL)
-.then(res => res.json())
-.then(data => {
-
-  allData = data;
-  tampilkan(data);
-  aktifkanFilter();
-
-})
-.catch(err => {
-
-  document.getElementById("karya").innerHTML =
-    "❌ Gagal memuat data";
-
-  console.error(err);
-});
-
-
-// TAMPILKAN DATA
-function tampilkan(data){
-
-  const div = document.getElementById("karya");
-  div.innerHTML = "";
-
-  if(!data || data.length === 0){
-    div.innerHTML = "Belum ada karya.";
-    return;
-  }
-
-  data.slice().reverse().forEach(d => {
-
-    const isLikhati = d.Jenis === "Likhati";
-
-    const card = document.createElement("div");
-
-    card.className = isLikhati ? "card likhati" : "card";
-
-    card.innerHTML = `
-  <h3>${d.Judul}</h3>
-
-  <small>
-    ✍️ ${d.Nama} | ${d.Jenis}
-  </small>
-
-  <p class="isi">${formatPuisi(d.Isi)}</p>
-`;
-
-    // MEDIA
-    if(d.Media){
-
-      // YouTube
-      if(d.Media.includes("youtube") || d.Media.includes("youtu.be")){
-
-        let link = d.Media
-          .replace("watch?v=","embed/")
-          .replace("youtu.be/","youtube.com/embed/");
-
-        const iframe = document.createElement("iframe");
-        iframe.src = link;
-        iframe.allowFullscreen = true;
-
-        card.appendChild(iframe);
-
-      }
-
-      // GAMBAR
-      else{
-
-        const img = document.createElement("img");
-        img.src = d.Media;
-
-        card.appendChild(img);
-
-      }
-
-    }
-
-    div.appendChild(card);
-
-  });
-
-}
-
-
-// FILTER + SEARCH
-function aktifkanFilter(){
-
-  const search = document.getElementById("searchInput");
-  const filter = document.getElementById("filterJenis");
-
-  function update(){
-
-    const keyword = search.value.toLowerCase();
-    const jenis = filter.value;
-
-    const hasil = allData.filter(d => {
-
-      const cocokCari =
-        d.Judul.toLowerCase().includes(keyword) ||
-        d.Nama.toLowerCase().includes(keyword);
-
-      const cocokJenis =
-        jenis === "all" || d.Jenis === jenis;
-
-      return cocokCari && cocokJenis;
-
-    });
-
-    tampilkan(hasil);
-  }
-
-  search.addEventListener("input", update);
-  filter.addEventListener("change", update);
-}
-
-
-// FORMAT PUISI
-function formatPuisi(text){
-
-  if(!text) return "";
-
-  return text.replace(/\n/g, "<br>");
-
-}
-
-</script>
 
 </body>
 </html>
