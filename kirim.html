@@ -6,12 +6,12 @@
 
 <title>Kirim Karya | CORENG</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
 <style>
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
-
 body{
-  font-family: 'Poppins', sans-serif;
+  font-family:'Poppins',sans-serif;
   background:#f3f6fb;
   margin:0;
   color:#1f2933;
@@ -21,99 +21,69 @@ body{
 header{
   background:linear-gradient(135deg,#1e40af,#2563eb);
   color:white;
-  padding:50px 20px;
+  padding:40px 20px;
   text-align:center;
 }
 
 header h1{
   margin:0;
-  font-size:42px;
-  letter-spacing:2px;
-}
-
-header p{
-  margin-top:8px;
-  opacity:0.9;
 }
 
 /* CONTAINER */
 .container{
-  max-width:900px;
+  max-width:600px;
   margin:auto;
   padding:30px 15px;
 }
 
-/* CARD */
-.card{
+/* FORM */
+form{
   background:white;
-  border-radius:15px;
   padding:25px;
-  margin-bottom:25px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.08);
-  transition:0.3s;
+  border-radius:12px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
-.card:hover{
-  transform:translateY(-3px);
-  box-shadow:0 12px 25px rgba(0,0,0,0.12);
-}
-
-/* JUDUL */
-.card h3{
-  margin:0;
-  color:#1e40af;
-  font-size:22px;
-}
-
-/* AUTHOR */
-.card small{
+label{
+  font-weight:600;
   display:block;
-  margin:8px 0 15px;
-  color:#64748b;
+  margin-top:15px;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:10px;
+  margin-top:5px;
+  border-radius:6px;
+  border:1px solid #ccc;
   font-size:14px;
 }
 
-/* ISI */
-.isi{
-  line-height:1.9;
-  font-size:16px;
-  white-space:pre-line;
+textarea{
+  min-height:120px;
 }
 
-/* GAMBAR */
-img{
+button{
+  margin-top:20px;
   width:100%;
-  border-radius:12px;
-  margin-top:15px;
-}
-
-/* VIDEO */
-iframe{
-  width:100%;
-  height:320px;
-  margin-top:15px;
-  border-radius:12px;
+  padding:12px;
   border:none;
+  background:#2563eb;
+  color:white;
+  font-size:16px;
+  border-radius:8px;
+  cursor:pointer;
 }
 
-/* FOOTER */
-footer{
+button:hover{
+  background:#1e40af;
+}
+
+.info{
   text-align:center;
-  padding:20px;
-  color:#64748b;
   font-size:13px;
-}
-
-@media(max-width:600px){
-
-  header h1{
-    font-size:32px;
-  }
-
-  .card{
-    padding:18px;
-  }
-
+  margin-top:10px;
+  color:#555;
 }
 
 </style>
@@ -122,15 +92,15 @@ footer{
 <body>
 
 <header>
-  <h2>Kirim Karya Siswa</h2>
-  <p>CORENG - Ruang Literasi</p>
+  <h1>Kirim Karya Siswa</h1>
+  <p>CORENG • Ruang Literasi</p>
 </header>
 
 <div class="container">
 
 <form id="karyaForm">
 
-  <label>Nama Siswa</label>
+  <label>Nama</label>
   <input type="text" id="nama" required>
 
   <label>Jenis Karya</label>
@@ -145,8 +115,8 @@ footer{
   <label>Judul</label>
   <input type="text" id="judul" required>
 
-  <label>Isi Karya / Puisi</label>
-  <textarea id="isi" placeholder="Tulis puisimu di sini..." required></textarea>
+  <label>Isi Karya</label>
+  <textarea id="isi" required></textarea>
 
   <label>Link Foto / Video (Opsional)</label>
   <input type="url" id="media" placeholder="https://...">
@@ -154,7 +124,7 @@ footer{
   <button type="submit">📤 Kirim Karya</button>
 
   <div class="info">
-    Karya akan direview guru sebelum dipublish.
+    Karya akan direview guru sebelum tampil.
   </div>
 
 </form>
@@ -164,7 +134,9 @@ footer{
 
 <script>
 
-// GANTI dengan URL Apps Script Anda
+// =======================
+// URL APPS SCRIPT
+// =======================
 const API_URL = "https://script.google.com/macros/s/AKfycby_M2P-eeuDh4cNIaeNi-WmfKEKLvsHSmHx5Meva-bysSMtIEElRXP5hUmK1mLC1sBRqw/exec";
 
 
@@ -174,29 +146,42 @@ document.getElementById("karyaForm")
   e.preventDefault();
 
   const data = {
+
     nama: document.getElementById("nama").value,
     jenis: document.getElementById("jenis").value,
     judul: document.getElementById("judul").value,
     isi: document.getElementById("isi").value,
-    media: document.getElementById("media").value
+
+    // HARUS "link" (sesuai Apps Script)
+    link: document.getElementById("media").value
+
   };
 
-  fetch(API_URL, {
-    method: "POST",
-    body: JSON.stringify(data)
+
+  fetch(API_URL,{
+    method:"POST",
+    body:JSON.stringify(data)
   })
+
   .then(r => r.text())
+
   .then(res => {
 
     alert("✅ Karya berhasil dikirim!");
     this.reset();
 
   })
+
   .catch(err => {
 
-    alert("❌ Gagal mengirim");
+    alert("❌ Gagal mengirim data");
     console.error(err);
 
   });
 
 });
+
+</script>
+
+</body>
+</html>
