@@ -248,54 +248,53 @@ fetch(API_URL)
   .then(res => res.json())
   .then(data => {
 
-    const container = document.getElementById("karyaList");
-    container.innerHTML = "";
+    const box = document.getElementById("karyaList");
 
-    // Filter hanya yang Publish
-    const publishData = data.filter(d => d.status === "Publish");
-
-    if (publishData.length === 0) {
-      container.innerHTML = "<p>Belum ada karya.</p>";
+    if(!box){
+      alert("ID karyaList tidak ditemukan!");
       return;
     }
 
-    publishData.reverse().forEach(item => {
+    box.innerHTML = "";
+
+    const publish = data.filter(d => d.status === "Publish");
+
+    if(publish.length === 0){
+      box.innerHTML = "<p>Belum ada karya.</p>";
+      return;
+    }
+
+    publish.reverse().forEach(d => {
 
       const card = document.createElement("div");
       card.className = "card";
 
       card.innerHTML = `
-        <h3>${item.judul}</h3>
-
-        <small>✍️ ${item.nama} | ${item.jenis}</small>
-
-        <p class="isi">${item.isi}</p>
+        <h3>${d.judul}</h3>
+        <small>✍️ ${d.nama} | ${d.jenis}</small>
+        <p class="isi">${d.isi}</p>
       `;
 
-      // Kalau ada link media
-      if(item.link){
-        if(item.link.includes("youtube")){
-          card.innerHTML += `
-            <iframe src="${item.link.replace("watch?v=","embed/")}"></iframe>
-          `;
-        } else {
-          card.innerHTML += `
-            <img src="${item.link}">
-          `;
+      if(d.link){
+        if(d.link.includes("youtube")){
+          const yt = d.link.replace("watch?v=","embed/");
+          card.innerHTML += `<iframe src="${yt}"></iframe>`;
+        }else{
+          card.innerHTML += `<img src="${d.link}">`;
         }
       }
 
-      container.appendChild(card);
+      box.appendChild(card);
 
     });
 
   })
   .catch(err => {
-    console.error(err);
-    document.getElementById("karyaList").innerHTML =
-      "<p>❌ Gagal memuat data.</p>";
+    alert("Gagal ambil data");
+    console.log(err);
   });
 </script>
+
 
 </body>
 </html>
