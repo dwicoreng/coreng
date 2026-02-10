@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CORENG | Ruang Kreasi Siswa</title>
+
+<style>
+
+body{
+  font-family: Arial, sans-serif;
+  background:#f5f7fa;
+  margin:0;
+}
+
+header{
+  background:#1e40af;
+  color:white;
+  padding:20px;
+  text-align:center;
+}
+
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:20px;
+}
+
+.card{
+  background:white;
+  border-radius:10px;
+  padding:15px;
+  margin-bottom:20px;
+  box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
+
+.card h3{
+  margin:0;
+  color:#1e40af;
+}
+
+.card small{
+  color:gray;
+}
+
+img{
+  width:100%;
+  border-radius:8px;
+  margin-top:10px;
+}
+
+iframe{
+  width:100%;
+  height:300px;
+  margin-top:10px;
+  border-radius:8px;
+  border:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>CORENG</h1>
+<p>Ruang Kreasi & Literasi Siswa</p>
+</header>
+
+<div class="container" id="karya">
+Loading...
+</div>
+
+
+<script>
+
+const API_URL = "https://script.google.com/macros/s/AKfycbxe_-8J8b9ermREogA2GIfeiU0sBdVlFSuc7W4XlbgILa79Arx41ppZEK8FXrh2Lere/exec";
+
+
+fetch(API_URL)
+.then(res => res.json())
+.then(data => tampilkan(data))
+.catch(err => {
+  document.getElementById("karya").innerHTML =
+    "Gagal memuat data";
+  console.error(err);
+});
+
+
+function tampilkan(data){
+
+  const div = document.getElementById("karya");
+
+  div.innerHTML = "";
+
+  if(data.length === 0){
+    div.innerHTML = "Belum ada karya.";
+    return;
+  }
+
+  data.reverse().forEach(d => {
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <h3>${d.Judul}</h3>
+      <small>
+        ✍️ ${d.Nama} | ${d.Jenis}
+      </small>
+
+      <p>${d.Isi}</p>
+    `;
+
+
+    // MEDIA
+    if(d.Media){
+
+      // YouTube
+      if(d.Media.includes("youtube") || d.Media.includes("youtu.be")){
+
+        let link = d.Media
+          .replace("watch?v=","embed/")
+          .replace("youtu.be/","youtube.com/embed/");
+
+        const iframe = document.createElement("iframe");
+        iframe.src = link;
+        iframe.allowFullscreen = true;
+
+        card.appendChild(iframe);
+
+      }
+
+      // Gambar
+      else{
+
+        const img = document.createElement("img");
+        img.src = d.Media;
+
+        card.appendChild(img);
+
+      }
+
+    }
+
+
+    div.appendChild(card);
+
+  });
+
+}
+
+</script>
+
+</body>
+</html>
