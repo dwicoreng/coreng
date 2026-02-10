@@ -4,13 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>CORENG | Cerpen</title>
+<title>Cerpen | CORENG</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 
-/* WARNA */
 :root{
   --dark:#2b1d12;
   --brown:#4b2e1a;
@@ -18,32 +17,19 @@
   --cream:#fbf7f2;
 }
 
-/* BODY */
 body{
   margin:0;
-  font-family:"Georgia",serif;
+  font-family:Georgia, serif;
 
   background:
-    repeating-linear-gradient(
-      90deg,
-      rgba(255,255,255,0.03) 0px,
-      rgba(255,255,255,0.03) 2px,
-      rgba(0,0,0,0.04) 4px,
-      rgba(0,0,0,0.04) 6px
-    ),
-    repeating-linear-gradient(
-      45deg,
-      rgba(0,0,0,0.03) 0px,
-      rgba(0,0,0,0.03) 1px,
-      transparent 2px,
-      transparent 6px
-    ),
-    linear-gradient(
-      to bottom,
-      #3a2615,
-      #4a311c,
-      #5a3f26
-    );
+  repeating-linear-gradient(
+    90deg,
+    rgba(255,255,255,0.03) 0px,
+    rgba(255,255,255,0.03) 2px,
+    rgba(0,0,0,0.04) 4px,
+    rgba(0,0,0,0.04) 6px
+  ),
+  linear-gradient(to bottom,#3a2615,#4a311c,#5a3f26);
 
   color:#f3e9d7;
   min-height:100vh;
@@ -52,8 +38,8 @@ body{
 /* HEADER */
 header{
   background:linear-gradient(135deg,#1c1917,#44403c);
+  padding:25px 15px;
   color:white;
-  padding:25px 20px;
 }
 
 .header-box{
@@ -62,6 +48,7 @@ header{
   display:flex;
   justify-content:space-between;
   align-items:center;
+  flex-wrap:wrap;
 }
 
 .logo{
@@ -70,126 +57,81 @@ header{
   letter-spacing:2px;
 }
 
-/* NAV */
 nav ul{
   list-style:none;
   display:flex;
-  gap:22px;
-  margin:0;
+  gap:20px;
   padding:0;
+  margin:0;
 }
 
 nav a{
-  text-decoration:none;
   color:white;
+  text-decoration:none;
   font-size:14px;
-  letter-spacing:1px;
-  transition:0.3s;
 }
 
 nav a:hover{
   color:var(--gold);
 }
 
-/* HERO */
-.hero{
-  background:linear-gradient(135deg,#2b1d12,#4b2e1a);
-  position:relative;
-  height:180px;
+/* JUDUL */
+.page-title{
+  text-align:center;
+  padding:35px 15px;
 }
 
-.hero::after{
-  content:'';
-  position:absolute;
-  inset:0;
-  background:rgba(43,29,18,0.65);
-}
-
-.hero-text{
-  position:relative;
-  z-index:2;
-  max-width:900px;
-  margin:auto;
-  height:100%;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  color:#fbf7f2;
-  padding:20px;
-}
-
-.hero-text h1{
+.page-title h1{
   margin:0;
-  font-size:32px;
+  font-family:'Merriweather',serif;
+}
+
+.page-title p{
+  opacity:0.8;
 }
 
 /* CONTAINER */
 .container{
   max-width:900px;
   margin:auto;
-  padding:40px 15px;
+  padding:20px 15px 50px;
 }
 
 /* CARD */
 .card{
-  background:linear-gradient(to bottom,#fffaf3,#fdf6eb);
+  background:white;
   border-radius:12px;
   padding:25px;
   margin-bottom:25px;
   border-left:5px solid var(--gold);
-  box-shadow:0 5px 15px rgba(0,0,0,0.1);
-  transition:0.3s;
-}
-
-.card:hover{
-  transform:translateY(-3px);
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+  color:#222;
 }
 
 .card h3{
   margin:0;
   font-family:'Merriweather',serif;
-  color:#292524;
 }
 
 .card small{
   display:block;
   margin:8px 0 15px;
-  color:#78716c;
+  color:#666;
 }
 
 .isi{
-  line-height:1.9;
-  font-size:16px;
   white-space:pre-line;
-  color:#292524;
+  line-height:1.9;
+  text-align:justify;
 }
 
 /* FOOTER */
 footer{
   background:#1c1917;
-  color:#a8a29e;
   text-align:center;
-  padding:25px 15px;
+  padding:20px;
   font-size:14px;
-}
-
-/* MOBILE */
-@media(max-width:768px){
-
-  .header-box{
-    flex-direction:column;
-    gap:15px;
-  }
-
-  nav ul{
-    flex-wrap:wrap;
-    justify-content:center;
-  }
-
-  .hero-text h1{
-    font-size:26px;
-  }
-
+  color:#aaa;
 }
 
 </style>
@@ -216,23 +158,18 @@ footer{
   </div>
 </header>
 
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-text">
-
-    <h1>Kumpulan Cerpen Siswa</h1>
-    <p>Kisah, imajinasi, dan refleksi kehidupan.</p>
-
-  </div>
+<!-- JUDUL -->
+<section class="page-title">
+  <h1>Kumpulan Cerpen Siswa</h1>
+  <p>CORENG • Ruang Literasi Digital</p>
 </section>
 
+<!-- DATA -->
+<div class="container" id="karyaList">
 
-<!-- CONTENT -->
-<div class="container" id="karya">
-  Memuat cerpen...
+  <p>⏳ Memuat cerpen...</p>
+
 </div>
-
 
 <!-- FOOTER -->
 <footer>
@@ -240,63 +177,51 @@ footer{
 </footer>
 
 
+<!-- SCRIPT -->
 <script>
 
-/* GANTI DENGAN URL SCRIPT ANDA */
-const API_URL =
-"https://script.google.com/macros/s/AKfycbxO_9dYRSwmXz8MUXPOn4gmQU2X2tQzRFWzwjfaPZc5CmXL7dZ042Qs_DNKGJ9z9Nq9/exec";
-
+const API_URL = "https://script.google.com/macros/s/AKfycby_M2P-eeuDh4cNIaeNi-WmfKEKLvsHSmHx5Meva-bysSMtIEElRXP5hUmK1mLC1sBRqw/exec";
 
 fetch(API_URL)
 .then(res => res.json())
 .then(data => {
 
-  const cerpen = data.filter(d => d.Jenis === "Cerpen");
+  const list = document.getElementById("karyaList");
+  list.innerHTML = "";
 
-  tampilkan(cerpen);
+  const cerpen = data.filter(d =>
+    d.jenis === "Cerpen" && d.status === "Publish"
+  );
 
-})
-.catch(err => {
-
-  document.getElementById("karya").innerHTML =
-    "❌ Gagal memuat data";
-
-  console.error(err);
-
-});
-
-
-function tampilkan(data){
-
-  const div = document.getElementById("karya");
-
-  div.innerHTML = "";
-
-  if(data.length === 0){
-    div.innerHTML = "Belum ada cerpen.";
+  if(cerpen.length === 0){
+    list.innerHTML = "<p>Belum ada cerpen yang dipublish.</p>";
     return;
   }
 
-  data.reverse().forEach(d => {
+  cerpen.forEach(d => {
 
     const card = document.createElement("div");
     card.className = "card";
 
     card.innerHTML = `
-      <h3>${d.Judul}</h3>
-
-      <small>
-        ✍️ ${d.Nama}
-      </small>
-
-      <p class="isi">${d.Isi}</p>
+      <h3>${d.judul}</h3>
+      <small>✍️ ${d.nama}</small>
+      <p class="isi">${d.isi}</p>
     `;
 
-    div.appendChild(card);
+    list.appendChild(card);
 
   });
 
-}
+})
+.catch(err => {
+
+  document.getElementById("karyaList").innerHTML =
+    "<p>❌ Gagal mengambil data.</p>";
+
+  console.error(err);
+
+});
 
 </script>
 
