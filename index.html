@@ -164,6 +164,7 @@ nav a:hover{
   line-height:1.9;
   font-size:16px;
   white-space:pre-line;
+  color:#2b1d12;
 }
 
 /* FOOTER */
@@ -257,12 +258,9 @@ fetch(API_URL)
 
     box.innerHTML = "";
 
-    const publish = data.filter(d => d.status === "Publish");
-
-    if(publish.length === 0){
-      box.innerHTML = "<p>Belum ada karya.</p>";
-      return;
-    }
+    const publish = data.filter(d =>
+  d.status && d.status.toLowerCase().trim() === "publish"
+);
 
     publish.reverse().forEach(d => {
 
@@ -272,7 +270,7 @@ fetch(API_URL)
       card.innerHTML = `
         <h3>${d.judul}</h3>
         <small>✍️ ${d.nama} | ${d.jenis}</small>
-        <p class="isi">${d.isi}</p>
+        <p class="isi">${d.isi.replace(/\n/g,"<br>")}</p>
       `;
 
       if(d.link){
@@ -298,5 +296,4 @@ fetch(API_URL)
 
 </body>
 </html>
-
 
