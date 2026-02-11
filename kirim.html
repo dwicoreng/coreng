@@ -119,7 +119,15 @@ button:hover{
   <textarea id="isi" required></textarea>
 
   <label>Link Foto / Video (Opsional)</label>
-  <input type="url" id="media" placeholder="https://...">
+<input type="url" id="media" placeholder="https://...">
+
+
+<label>Bio Singkat</label>
+<textarea id="bio" placeholder="Tentang penulis..."></textarea>
+
+
+<label>Link Foto Profil</label>
+<input type="url" id="foto" placeholder="https://...">
 
   <button type="submit">📤 Kirim Karya</button>
 
@@ -152,8 +160,9 @@ document.getElementById("karyaForm")
     judul: document.getElementById("judul").value,
     isi: document.getElementById("isi").value,
 
-    // HARUS "link" (sesuai Apps Script)
-    link: document.getElementById("media").value
+    link: document.getElementById("media").value,
+    bio: document.getElementById("bio").value,
+    foto: document.getElementById("foto").value
 
   };
 
@@ -163,18 +172,26 @@ document.getElementById("karyaForm")
     body:JSON.stringify(data)
   })
 
-  .then(r => r.text())
+  .then(r => r.json())
 
   .then(res => {
 
-    alert("✅ Karya berhasil dikirim!");
-    this.reset();
+    if(res.status=="success"){
+
+      alert("✅ Karya berhasil dikirim!");
+      this.reset();
+
+    }else{
+
+      alert("❌ Gagal menyimpan");
+
+    }
 
   })
 
   .catch(err => {
 
-    alert("❌ Gagal mengirim data");
+    alert("❌ Koneksi bermasalah");
     console.error(err);
 
   });
@@ -183,6 +200,7 @@ document.getElementById("karyaForm")
 
 </script>
 
+
+
 </body>
 </html>
-
