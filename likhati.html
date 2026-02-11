@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Likhati | CORENG</title>
+<h1>Alur Adnyana</h1>
+
 
 <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
@@ -102,7 +104,7 @@ nav a:hover{
   background:white;
   border-radius:12px;
   padding:25px;
-  margin-bottom:30px;
+  margin-bottom:25px;
   border-left:5px solid var(--gold);
   box-shadow:0 4px 12px rgba(0,0,0,0.1);
   color:#222;
@@ -122,22 +124,6 @@ nav a:hover{
 .isi{
   white-space:pre-line;
   line-height:1.8;
-  margin-top:15px;
-}
-
-/* MEDIA */
-img{
-  width:100%;
-  border-radius:10px;
-  margin-top:15px;
-}
-
-iframe{
-  width:100%;
-  height:320px;
-  border-radius:10px;
-  border:none;
-  margin-top:15px;
 }
 
 /* FOOTER */
@@ -176,19 +162,19 @@ footer{
 <!-- JUDUL -->
 <section class="page-title">
   <h1>Likhati</h1>
-  <p>Alur Adnyana</p>
+  <p>CORENG • Lorong Literasi</p>
 </section>
 
 <!-- DATA -->
 <div class="container" id="karyaList">
 
-  <p>⏳ Memuat karya...</p>
+  <p>⏳ Memuat likhati...</p>
 
 </div>
 
 <!-- FOOTER -->
 <footer>
-  © 2026 CORENG • Ruang Literasi Sekolah
+  © 2026 CORENG • Lorong Literasi 
 </footer>
 
 
@@ -204,16 +190,16 @@ fetch(API_URL)
   const list = document.getElementById("karyaList");
   list.innerHTML = "";
 
-  const likhati = data.filter(d =>
-    d.jenis === "Likhati" && d.status === "Publish"
+  const puisi = data.filter(d =>
+    d.jenis === "Puisi" && d.status === "Publish"
   );
 
-  if(likhati.length === 0){
-    list.innerHTML = "<p>Belum ada karya Likhati.</p>";
+  if(puisi.length === 0){
+    list.innerHTML = "<p>Belum ada puisi yang dipublish.</p>";
     return;
   }
 
-  likhati.forEach(d => {
+  puisi.forEach(d => {
 
     const card = document.createElement("div");
     card.className = "card";
@@ -221,39 +207,8 @@ fetch(API_URL)
     card.innerHTML = `
       <h3>${d.judul}</h3>
       <small>✍️ ${d.nama}</small>
+      <p class="isi">${d.isi}</p>
     `;
-
-    // MEDIA
-    if(d.link){
-
-      if(d.link.includes("youtube") || d.link.includes("youtu.be")){
-
-        let yt = d.link
-          .replace("watch?v=","embed/")
-          .replace("youtu.be/","youtube.com/embed/");
-
-        const iframe = document.createElement("iframe");
-        iframe.src = yt;
-
-        card.appendChild(iframe);
-
-      }else{
-
-        const img = document.createElement("img");
-        img.src = d.link;
-
-        card.appendChild(img);
-
-      }
-
-    }
-
-    // NARASI
-    const isi = document.createElement("p");
-    isi.className = "isi";
-    isi.textContent = d.isi;
-
-    card.appendChild(isi);
 
     list.appendChild(card);
 
