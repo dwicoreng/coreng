@@ -213,6 +213,7 @@ footer{
         <li><a href="cerpen.html">Cerpen</a></li>
         <li><a href="likhati.html">Likhati</a></li>
         <li><a href="kirim.html">Kirim Karya</a></li>
+        <li><a href="penulis.html">Penulis</a></li>
       </ul>
     </nav>
 
@@ -266,6 +267,7 @@ const API_URL = "https://script.google.com/macros/s/AKfycby_M2P-eeuDh4cNIaeNi-Wm
 
 let allData = [];
 
+/* AMBIL DATA */
 fetch(API_URL)
   .then(res => res.json())
   .then(data => {
@@ -290,6 +292,7 @@ fetch(API_URL)
   });
 
 
+/* TAMPILKAN DATA */
 function tampilkanData(data){
 
   const box = document.getElementById("karyaList");
@@ -305,10 +308,24 @@ function tampilkanData(data){
     const card = document.createElement("div");
     card.className = "card";
 
+    let lampiran = "";
+
+    if(d.link){
+      lampiran = `
+        <p style="margin-top:10px">
+          📎 <a href="${d.link}" target="_blank"
+          style="color:#2563eb;font-weight:600">
+          Lihat Lampiran
+          </a>
+        </p>
+      `;
+    }
+
     card.innerHTML = `
       <h3>${d.judul}</h3>
       <small>✍️ ${d.nama} | ${d.jenis}</small>
       <p class="isi">${d.isi.replace(/\n/g,"<br>")}</p>
+      ${lampiran}
     `;
 
     box.appendChild(card);
@@ -319,7 +336,8 @@ function tampilkanData(data){
 
 
 /* FITUR SEARCH */
-document.getElementById("searchInput").addEventListener("input", function(){
+document.getElementById("searchInput")
+.addEventListener("input", function(){
 
   const keyword = this.value.toLowerCase();
 
@@ -333,6 +351,7 @@ document.getElementById("searchInput").addEventListener("input", function(){
 
 });
 </script>
+
 
 
 
