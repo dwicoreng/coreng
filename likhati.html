@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Likhati | CORENG</title>
-<h1>Alur Adnyana</h1>
-
 
 <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
@@ -161,26 +159,25 @@ footer{
 
 <!-- JUDUL -->
 <section class="page-title">
-  <h1>Likhati</h1>
+  <h1>Kumpulan Likhati</h1>
   <p>CORENG • Lorong Literasi</p>
 </section>
 
 <!-- DATA -->
 <div class="container" id="karyaList">
-
   <p>⏳ Memuat likhati...</p>
-
 </div>
 
 <!-- FOOTER -->
 <footer>
-  © 2026 CORENG • Lorong Literasi 
+  © 2026 CORENG • Lorong Literasi
 </footer>
 
 
 <!-- SCRIPT -->
 <script>
 
+// GANTI DENGAN API YANG SAMA DENGAN INDEX.HTML
 const API_URL = "https://script.google.com/macros/s/AKfycby_M2P-eeuDh4cNIaeNi-WmfKEKLvsHSmHx5Meva-bysSMtIEElRXP5hUmK1mLC1sBRqw/exec";
 
 fetch(API_URL)
@@ -190,24 +187,42 @@ fetch(API_URL)
   const list = document.getElementById("karyaList");
   list.innerHTML = "";
 
-  const puisi = data.filter(d =>
-    d.jenis === "Puisi" && d.status === "Publish"
+  // FILTER LIKHATI + PUBLISH
+  const likhati = data.filter(d =>
+    d.jenis &&
+    d.jenis.toLowerCase() === "likhati" &&
+    d.status &&
+    d.status.toLowerCase() === "publish"
   );
 
-  if(puisi.length === 0){
-    list.innerHTML = "<p>Belum ada puisi yang dipublish.</p>";
+  if(likhati.length === 0){
+    list.innerHTML = "<p>📭 Belum ada likhati yang dipublish.</p>";
     return;
   }
 
-  puisi.forEach(d => {
+  likhati.reverse().forEach(d => {
 
     const card = document.createElement("div");
     card.className = "card";
+
+    let lampiran = "";
+
+    if(d.link){
+      lampiran = `
+        <p style="margin-top:10px">
+          📎 <a href="${d.link}" target="_blank"
+          style="color:#2563eb;font-weight:600">
+          Lihat Lampiran
+          </a>
+        </p>
+      `;
+    }
 
     card.innerHTML = `
       <h3>${d.judul}</h3>
       <small>✍️ ${d.nama}</small>
       <p class="isi">${d.isi}</p>
+      ${lampiran}
     `;
 
     list.appendChild(card);
@@ -228,5 +243,3 @@ fetch(API_URL)
 
 </body>
 </html>
-
-
