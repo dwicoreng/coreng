@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Penulis | CORENG</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --dark:#2b1d12;
+  --brown:#4b2e1a;
+  --gold:#d4b06a;
+  --cream:#fbf7f2;
+}
+
+body{
+  margin:0;
+  font-family:"Georgia", serif;
+  background:
+    repeating-linear-gradient(
+      90deg, rgba(255,255,255,0.03) 0px,
+      rgba(255,255,255,0.03) 2px,
+      rgba(0,0,0,0.04) 4px,
+      rgba(0,0,0,0.04) 6px
+    ),
+    linear-gradient(to bottom,#3a2615,#4a311c,#5a3f26);
+  color:#f3e9d7;
+  min-height:100vh;
+}
+
+/* HEADER */
+header{
+  background:linear-gradient(135deg,#1c1917,#44403c);
+  color:white;
+  padding:30px 20px;
+}
+.header-box{
+  max-width:1100px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.logo{
+  font-family:'Merriweather',serif;
+  font-size:28px;
+  letter-spacing:2px;
+}
+nav ul{
+  list-style:none;
+  display:flex;
+  gap:25px;
+  margin:0;
+  padding:0;
+}
+nav a{
+  text-decoration:none;
+  color:white;
+  font-size:14px;
+  letter-spacing:1px;
+  transition:0.3s;
+}
+nav a:hover{
+  color:var(--gold);
+}
+
+/* HERO */
+.hero{
+  background:linear-gradient(135deg,#2b1d12,#4b2e1a);
+  position:relative;
+  height:180px;
+}
+.hero::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:rgba(43,29,18,0.65);
+}
+.hero-text{
+  position:relative;
+  z-index:2;
+  max-width:900px;
+  margin:auto;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  color:#fbf7f2;
+  padding:20px;
+}
+.hero-text h1{
+  font-family:'Merriweather',serif;
+  margin:0;
+  font-size:32px;
+}
+.hero-text p{
+  max-width:600px;
+  opacity:0.9;
+}
+
+/* CONTAINER */
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:40px 15px;
+}
+
+/* CARD */
+.card{
+  background:white;
+  border-radius:12px;
+  padding:20px;
+  margin-bottom:20px;
+  border-left:5px solid var(--gold);
+  box-shadow:0 5px 15px rgba(0,0,0,0.08);
+  color:#222;
+}
+.card h3{
+  margin:0;
+  font-family:'Merriweather',serif;
+}
+.card small{
+  display:block;
+  margin-top:8px;
+  color:#555;
+}
+
+/* SEARCH */
+#searchInput{
+  width:100%;
+  padding:12px;
+  border-radius:8px;
+  border:none;
+  margin-bottom:25px;
+  font-size:15px;
+}
+
+/* FOOTER */
+footer{
+  background:#1c1917;
+  color:#a8a29e;
+  text-align:center;
+  padding:25px 15px;
+  font-size:14px;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+  .header-box{
+    flex-direction:column;
+    gap:15px;
+  }
+  nav ul{
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+  .hero-text h1{
+    font-size:26px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-box">
+    <div class="logo">CORENG</div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Beranda</a></li>
+        <li><a href="puisi.html">Puisi</a></li>
+        <li><a href="cerpen.html">Cerpen</a></li>
+        <li><a href="likhati.html">Likhati</a></li>
+        <li><a href="kirim.html">Kirim Karya</a></li>
+        <li><a href="penulis.html">Penulis</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <h1>Daftar Penulis</h1>
+    <p>CORENG • Lorong Literasi</p>
+  </div>
+</section>
+
+<!-- SEARCH -->
+<div class="container">
+  <input type="text" id="searchInput" placeholder="🔍 Cari penulis...">
+</div>
+
+<!-- CONTENT -->
+<div class="container" id="penulisList">
+  <p>⏳ Memuat penulis...</p>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  © 2026 CORENG • Lorong Literasi Sekolah
+</footer>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycby_M2P-eeuDh4cNIaeNi-WmfKEKLvsHSmHx5Meva-bysSMtIEElRXP5hUmK1mLC1sBRqw/exec";
+
+let allData = [];
+
+/* AMBIL DATA */
+fetch(API_URL)
+.then(res => res.json())
+.then(data => {
+
+  const box = document.getElementById("penulisList");
+  allData = data.filter(d =>
+    d.status && d.status.toLowerCase().trim() === "publish"
+  );
+
+  if(allData.length === 0){
+    box.innerHTML = "<p>😔 Belum ada penulis.</p>";
+    return;
+  }
+
+  tampilkanPenulis(allData);
+
+})
+.catch(err => {
+  document.getElementById("penulisList").innerHTML = "<p>❌ Gagal mengambil data.</p>";
+  console.error(err);
+});
+
+/* TAMPILKAN PENULIS */
+function tampilkanPenulis(data){
+  const box = document.getElementById("penulisList");
+  box.innerHTML = "";
+
+  // Hitung jumlah karya per penulis
+  const penulisMap = {};
+  data.forEach(d => {
+    if(d.nama){
+      if(!penulisMap[d.nama]) penulisMap[d.nama] = 0;
+      penulisMap[d.nama]++;
+    }
+  });
+
+  // Urutkan alfabetis
+  const penulisSorted = Object.keys(penulisMap).sort();
+
+  penulisSorted.forEach(nama => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <h3>${nama}</h3>
+      <small>Jumlah karya: ${penulisMap[nama]}</small>
+    `;
+    box.appendChild(card);
+  });
+}
+
+/* SEARCH PENULIS */
+document.getElementById("searchInput").addEventListener("input", function(){
+  const keyword = this.value.toLowerCase();
+  const hasil = allData.filter(d => d.nama && d.nama.toLowerCase().includes(keyword));
+  tampilkanPenulis(hasil);
+});
+</script>
+
+</body>
+</html>
