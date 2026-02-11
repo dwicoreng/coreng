@@ -232,6 +232,25 @@ dengan kata sederhana dengan doa sederhana
   </div>
 </section>
 
+<!-- SEARCH -->
+<div class="container">
+
+  <input
+    type="text"
+    id="searchInput"
+    placeholder="🔍 Cari judul, nama, atau isi karya..."
+    style="
+      width:100%;
+      padding:12px;
+      border-radius:8px;
+      border:none;
+      margin-bottom:25px;
+      font-size:15px;
+    "
+  >
+
+</div>
+
 <!-- CONTENT -->
 <div class="container" id="karyaList">
   <p>⏳ Memuat karya...</p>
@@ -245,6 +264,8 @@ dengan kata sederhana dengan doa sederhana
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycby_M2P-eeuDh4cNIaeNi-WmfKEKLvsHSmHx5Meva-bysSMtIEElRXP5hUmK1mLC1sBRqw/exec";
 
+let allData = [];
+
 fetch(API_URL)
   .then(res => res.json())
   .then(data => {
@@ -256,42 +277,63 @@ fetch(API_URL)
       return;
     }
 
-    box.innerHTML = "";
+    allData = data.filter(d =>
+      d.status && d.status.toLowerCase().trim() === "publish"
+    );
 
-    const publish = data.filter(d =>
-  d.status && d.status.toLowerCase().trim() === "publish"
-);
-
-    publish.reverse().forEach(d => {
-
-      const card = document.createElement("div");
-      card.className = "card";
-
-      card.innerHTML = `
-        <h3>${d.judul}</h3>
-        <small>✍️ ${d.nama} | ${d.jenis}</small>
-        <p class="isi">${d.isi.replace(/\n/g,"<br>")}</p>
-      `;
-
-      if(d.link){
-        if(d.link.includes("youtube")){
-          const yt = d.link.replace("watch?v=","embed/");
-          card.innerHTML += `<iframe src="${yt}"></iframe>`;
-        }else{
-          card.innerHTML += `<img src="${d.link}">`;
-        }
-      }
-
-      box.appendChild(card);
-
-    });
+    tampilkanData(allData);
 
   })
   .catch(err => {
     alert("Gagal ambil data");
     console.log(err);
   });
+
+
+function tampilkanData(data){
+
+  const box = document.getElementById("karyaList");
+  box.innerHTML = "";
+
+  if(data.length === 0){
+    box.innerHTML = "<p>😔 Karya tidak ditemukan.</p>";
+    return;
+  }
+
+  data.slice().reverse().forEach(d => {
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <h3>${d.judul}</h3>
+      <small>✍️ ${d.nama} | ${d.jenis}</small>
+      <p class="isi">${d.isi.replace(/\n/g,"<br>")}</p>
+    `;
+
+    box.appendChild(card);
+
+  });
+
+}
+
+
+/* FITUR SEARCH */
+document.getElementById("searchInput").addEventListener("input", function(){
+
+  const keyword = this.value.toLowerCase();
+
+  const hasil = allData.filter(d =>
+    (d.judul && d.judul.toLowerCase().includes(keyword)) ||
+    (d.nama && d.nama.toLowerCase().includes(keyword)) ||
+    (d.isi && d.isi.toLowerCase().includes(keyword))
+  );
+
+  tampilkanData(hasil);
+
+});
 </script>
+
 
 
 </body>
