@@ -10,6 +10,7 @@
 
 <style>
 
+/* WARNA */
 :root{
   --dark:#2b1d12;
   --brown:#4b2e1a;
@@ -54,7 +55,6 @@ header{
 .logo{
   font-family:'Merriweather',serif;
   font-size:26px;
-  letter-spacing:2px;
 }
 
 nav ul{
@@ -90,7 +90,7 @@ nav a:hover{
 .container{
   max-width:900px;
   margin:auto;
-  padding:20px 15px 50px;
+  padding:15px;
 }
 
 /* CARD */
@@ -115,34 +115,26 @@ nav a:hover{
   color:#666;
 }
 
+/* ISI */
 .isi{
-  line-height:1.8;
-  white-space:pre-line;
+  line-height:1.9;
+  font-size:16px;
   max-height:140px;
   overflow:hidden;
-  transition:0.3s;
 }
 
-/* Jika dibuka penuh */
 .isi.full{
   max-height:none;
-  overflow:visible;
 }
 
-/* BUTTON */
-.btn{
+/* BACA */
+.baca-btn{
   display:inline-block;
-  margin-top:10px;
-  padding:6px 12px;
-  background:#2563eb;
-  color:white;
-  border-radius:6px;
-  font-size:13px;
+  margin-top:8px;
+  color:#2563eb;
   cursor:pointer;
-}
-
-.btn:hover{
-  background:#1e40af;
+  font-weight:600;
+  font-size:14px;
 }
 
 /* FOOTER */
@@ -161,121 +153,133 @@ footer{
 
 <!-- HEADER -->
 <header>
-  <div class="header-box">
+<div class="header-box">
 
-    <div class="logo">CORENG</div>
+  <div class="logo">CORENG</div>
 
-    <nav>
-      <ul>
-        <li><a href="index.html">Beranda</a></li>
-        <li><a href="puisi.html">Puisi</a></li>
-        <li><a href="cerpen.html">Cerpen</a></li>
-        <li><a href="likhati.html">Likhati</a></li>
-        <li><a href="kirim.html">Kirim Karya</a></li>
-      </ul>
-    </nav>
+  <nav>
+    <ul>
+      <li><a href="index.html">Beranda</a></li>
+      <li><a href="puisi.html">Puisi</a></li>
+      <li><a href="cerpen.html">Cerpen</a></li>
+      <li><a href="likhati.html">Likhati</a></li>
+      <li><a href="kirim.html">Kirim Karya</a></li>
+      <li><a href="penulis.html">Penulis</a></li>
+    </ul>
+  </nav>
 
-  </div>
+</div>
 </header>
 
 <!-- JUDUL -->
 <section class="page-title">
-  <h1>Kumpulan Cerpen</h1>
-  <p>CORENG • Lorong Literasi</p>
+<h1>Kumpulan Cerpen</h1>
+<p>CORENG • Lorong Literasi</p>
 </section>
 
 <!-- DATA -->
 <div class="container" id="karyaList">
-  <p>⏳ Memuat cerpen...</p>
+<p>⏳ Memuat cerpen...</p>
 </div>
 
 <!-- FOOTER -->
 <footer>
-  © 2026 CORENG • Lorong Literasi
+© 2026 CORENG • Lorong Literasi
 </footer>
 
 
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycby_M2P-eeuDh4cNIaeNi-WmfKEKLvsHSmHx5Meva-bysSMtIEElRXP5hUmK1mLC1sBRqw/exec";
+/* API */
+const API_URL =
+"https://script.google.com/macros/s/AKfycby_M2P-eeuDh4cNIaeNi-WmfKEKLvsHSmHx5Meva-bysSMtIEElRXP5hUmK1mLC1sBRqw/exec";
 
+
+/* LOAD */
 fetch(API_URL)
-.then(res => res.json())
+.then(r => r.json())
 .then(data => {
 
-  const list = document.getElementById("karyaList");
-  list.innerHTML = "";
-
-  // FILTER CERPEN
   const cerpen = data.filter(d =>
+
     d.jenis &&
+    d.jenis.toLowerCase() === "cerpen" &&
+
     d.status &&
-    d.jenis.toLowerCase().includes("cerpen") &&
-    d.status.toLowerCase().includes("publish")
+    d.status.toLowerCase() === "publish"
+
   );
 
-  if(cerpen.length === 0){
-    list.innerHTML = "<p>Belum ada cerpen yang dipublish.</p>";
-    return;
-  }
-
-  cerpen.reverse().forEach((d, i) => {
-
-    const card = document.createElement("div");
-    card.className = "card";
-
-    card.innerHTML = `
-      <h3>${d.judul}</h3>
-      <small>✍️ ${d.nama}</small>
-
-      <p class="isi" id="isi-${i}">
-        ${d.isi}
-      </p>
-
-      <button class="btn" onclick="toggleIsi(${i}, this)">
-        Baca selengkapnya
-      </button>
-    `;
-
-    list.appendChild(card);
-
-  });
+  tampilkan(cerpen);
 
 })
 .catch(err => {
 
   document.getElementById("karyaList").innerHTML =
-    "<p>❌ Gagal mengambil data.</p>";
+  "<p>❌ Gagal mengambil data</p>";
 
   console.error(err);
 
 });
 
 
-function toggleIsi(i, btn){
+/* TAMPIL */
+function tampilkan(data){
 
-  const el = document.getElementById("isi-" + i);
+  const box = document.getElementById("karyaList");
+  box.innerHTML = "";
 
-  if(el.classList.contains("full")){
-
-    el.classList.remove("full");
-    btn.innerText = "Baca selengkapnya";
-
-  }else{
-
-    el.classList.add("full");
-    btn.innerText = "Tutup";
-
+  if(data.length === 0){
+    box.innerHTML = "<p>😔 Belum ada cerpen</p>";
+    return;
   }
+
+  data.slice().reverse().forEach(d => {
+
+    const card = document.createElement("div");
+    card.className="card";
+
+
+    card.innerHTML=`
+
+    <h3>${d.judul}</h3>
+
+    <small>✍️ ${d.nama}</small>
+
+    <div class="isi">
+      ${d.isi.replace(/\n/g,"<br>")}
+    </div>
+
+    <span class="baca-btn">
+      📖 Baca Selengkapnya
+    </span>
+
+    `;
+
+    box.appendChild(card);
+
+
+    /* TOGGLE */
+    const btn=card.querySelector(".baca-btn");
+    const isi=card.querySelector(".isi");
+
+    btn.addEventListener("click",()=>{
+
+      if(isi.classList.contains("full")){
+        isi.classList.remove("full");
+        btn.innerText="📖 Baca Selengkapnya";
+      }else{
+        isi.classList.add("full");
+        btn.innerText="🔽 Tutup";
+      }
+
+    });
+
+  });
 
 }
 
 </script>
-
-
-</script>
-
-
 
 </body>
 </html>
