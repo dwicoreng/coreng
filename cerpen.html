@@ -202,25 +202,69 @@ fetch(API_URL)
     const card = document.createElement("div");
     card.className = "card";
 
-    card.innerHTML = `
-      <h3>${d.judul}</h3>
-      <small>✍️ ${d.nama}</small>
-      <p class="isi">${d.isi}</p>
-    `;
+    const fullText = d.isi || "";
+const shortText = fullText.substring(0, 300);
+
+card.innerHTML = `
+  <h3>${d.judul}</h3>
+  <small>✍️ ${d.nama}</small>
+
+  <p class="isi">
+    <span class="short">
+      ${shortText}${fullText.length > 300 ? "..." : ""}
+    </span>
+
+    <span class="full" style="display:none">
+      ${fullText}
+    </span>
+  </p>
+
+  ${
+    fullText.length > 300
+    ? `<button class="btnRead"
+        style="
+          background:none;
+          border:none;
+          color:#2563eb;
+          cursor:pointer;
+          font-weight:600;
+          padding:0;
+        ">
+        📖 Baca Selengkapnya
+      </button>`
+    : ""
+  }
+`;
 
     list.appendChild(card);
 
+/* Tombol baca */
+const btn = card.querySelector(".btnRead");
+
+if(btn){
+
+  const short = card.querySelector(".short");
+  const full = card.querySelector(".full");
+
+  btn.addEventListener("click", function(){
+
+    if(full.style.display === "none"){
+
+      full.style.display = "inline";
+      short.style.display = "none";
+      btn.textContent = "🔽 Tutup";
+
+    }else{
+
+      full.style.display = "none";
+      short.style.display = "inline";
+      btn.textContent = "📖 Baca Selengkapnya";
+
+    }
+
   });
 
-})
-.catch(err => {
-
-  document.getElementById("karyaList").innerHTML =
-    "<p>❌ Gagal mengambil data.</p>";
-
-  console.error(err);
-
-});
+}
 
 </script>
 
