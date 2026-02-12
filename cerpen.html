@@ -206,7 +206,7 @@ fetch(API_URL)
   const list = document.getElementById("karyaList");
   list.innerHTML = "";
 
-  // FILTER CERpen AMAN
+  // FILTER CERPEN
   const cerpen = data.filter(d =>
     d.jenis &&
     d.status &&
@@ -224,24 +224,17 @@ fetch(API_URL)
     const card = document.createElement("div");
     card.className = "card";
 
-    // Potong teks awal
-    const ringkas = d.isi.length > 300
-      ? d.isi.substring(0,300) + "..."
-      : d.isi;
-
     card.innerHTML = `
       <h3>${d.judul}</h3>
       <small>✍️ ${d.nama}</small>
 
-      <p class="isi" id="isi-${i}" data-full="${d.isi.replace(/"/g,'&quot;')}">
-        ${ringkas}
+      <p class="isi" id="isi-${i}">
+        ${d.isi}
       </p>
 
-      <a href="javascript:void(0)"
-         onclick="toggleIsi(${i}, this)"
-         style="color:#2563eb;font-weight:600">
-         Baca selengkapnya
-      </a>
+      <button class="btn" onclick="toggleIsi(${i}, this)">
+        Baca selengkapnya
+      </button>
     `;
 
     list.appendChild(card);
@@ -259,37 +252,29 @@ fetch(API_URL)
 });
 
 
-// TOGGLE BACA SELENGKAPNYA
 function toggleIsi(i, btn){
 
   const el = document.getElementById("isi-" + i);
 
-  if(el.dataset.open === "true"){
+  if(el.classList.contains("full")){
 
-    // Tutup lagi
-    const full = el.dataset.full;
-
-    el.innerText =
-      full.length > 300
-      ? full.substring(0,300) + "..."
-      : full;
-
+    el.classList.remove("full");
     btn.innerText = "Baca selengkapnya";
-    el.dataset.open = "false";
 
   }else{
 
-    // Buka penuh
-    el.innerText = el.dataset.full;
-
+    el.classList.add("full");
     btn.innerText = "Tutup";
-    el.dataset.open = "true";
 
   }
 
 }
 
 </script>
+
+
+</script>
+
 
 
 </body>
