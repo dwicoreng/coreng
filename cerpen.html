@@ -200,11 +200,11 @@ fetch(API_URL)
 
   // FILTER CERpen AMAN
   const cerpen = data.filter(d =>
-    d.jenis &&
-    d.status &&
-    d.jenis.toLowerCase().trim() === "cerpen" &&
-    d.status.toLowerCase().trim() === "publish"
-  );
+  d.jenis &&
+  d.status &&
+  d.jenis.toLowerCase().includes("cerpen") &&
+  d.status.toLowerCase().includes("publish")
+);
 
   if(cerpen.length === 0){
     list.innerHTML = "<p>Belum ada cerpen yang dipublish.</p>";
