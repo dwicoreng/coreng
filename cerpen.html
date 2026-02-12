@@ -86,10 +86,6 @@ nav a:hover{
   font-family:'Merriweather',serif;
 }
 
-.page-title p{
-  opacity:0.8;
-}
-
 /* CONTAINER */
 .container{
   max-width:900px;
@@ -124,6 +120,22 @@ nav a:hover{
   line-height:1.8;
 }
 
+/* BUTTON */
+.btn{
+  display:inline-block;
+  margin-top:10px;
+  padding:6px 12px;
+  background:#2563eb;
+  color:white;
+  border-radius:6px;
+  font-size:13px;
+  cursor:pointer;
+}
+
+.btn:hover{
+  background:#1e40af;
+}
+
 /* FOOTER */
 footer{
   background:#1c1917;
@@ -151,7 +163,6 @@ footer{
         <li><a href="cerpen.html">Cerpen</a></li>
         <li><a href="likhati.html">Likhati</a></li>
         <li><a href="kirim.html">Kirim Karya</a></li>
-        <li><a href="penulis.html">Penulis</a></li>
       </ul>
     </nav>
 
@@ -174,10 +185,11 @@ footer{
   © 2026 CORENG • Lorong Literasi
 </footer>
 
-<!-- SCRIPT -->
+
 <script>
 
 const API_URL = "https://script.google.com/macros/s/AKfycby_M2P-eeuDh4cNIaeNi-WmfKEKLvsHSmHx5Meva-bysSMtIEElRXP5hUmK1mLC1sBRqw/exec";
+
 
 fetch(API_URL)
 .then(res => res.json())
@@ -186,14 +198,16 @@ fetch(API_URL)
   const list = document.getElementById("karyaList");
   list.innerHTML = "";
 
+  // FILTER CERpen AMAN
   const cerpen = data.filter(d =>
-    d.jenis === "Cerpen" &&
+    d.jenis &&
     d.status &&
-    d.status.toLowerCase() === "publish"
+    d.jenis.toLowerCase().trim() === "cerpen" &&
+    d.status.toLowerCase().trim() === "publish"
   );
 
   if(cerpen.length === 0){
-    list.innerHTML = "<p>Belum ada cerpen.</p>";
+    list.innerHTML = "<p>Belum ada cerpen yang dipublish.</p>";
     return;
   }
 
@@ -202,69 +216,51 @@ fetch(API_URL)
     const card = document.createElement("div");
     card.className = "card";
 
-    const fullText = d.isi || "";
-const shortText = fullText.substring(0, 300);
+    const ringkas = d.isi.length > 300
+      ? d.isi.substring(0,300) + "..."
+      : d.isi;
 
-card.innerHTML = `
-  <h3>${d.judul}</h3>
-  <small>✍️ ${d.nama}</small>
+    card.innerHTML = `
+      <h3>${d.judul}</h3>
+      <small>✍️ ${d.nama}</small>
 
-  <p class="isi">
-    <span class="short">
-      ${shortText}${fullText.length > 300 ? "..." : ""}
-    </span>
+      <p class="isi" data-full="${d.isi}">
+        ${ringkas}
+      </p>
 
-    <span class="full" style="display:none">
-      ${fullText}
-    </span>
-  </p>
-
-  ${
-    fullText.length > 300
-    ? `<button class="btnRead"
-        style="
-          background:none;
-          border:none;
-          color:#2563eb;
-          cursor:pointer;
-          font-weight:600;
-          padding:0;
-        ">
-        📖 Baca Selengkapnya
-      </button>`
-    : ""
-  }
-`;
+      ${ d.isi.length > 300 ? `<span class="btn">Baca Selengkapnya</span>` : "" }
+    `;
 
     list.appendChild(card);
 
-/* Tombol baca */
-const btn = card.querySelector(".btnRead");
+  });
 
-if(btn){
 
-  const short = card.querySelector(".short");
-  const full = card.querySelector(".full");
+  // FITUR BACA SELENGKAPNYA
+  document.querySelectorAll(".btn").forEach(btn => {
 
-  btn.addEventListener("click", function(){
+    btn.addEventListener("click", function(){
 
-    if(full.style.display === "none"){
+      const isi = this.previousElementSibling;
 
-      full.style.display = "inline";
-      short.style.display = "none";
-      btn.textContent = "🔽 Tutup";
+      isi.innerText = isi.dataset.full;
 
-    }else{
+      this.remove();
 
-      full.style.display = "none";
-      short.style.display = "inline";
-      btn.textContent = "📖 Baca Selengkapnya";
-
-    }
+    });
 
   });
 
-}
+
+})
+.catch(err => {
+
+  document.getElementById("karyaList").innerHTML =
+    "<p>❌ Gagal mengambil data.</p>";
+
+  console.error(err);
+
+});
 
 </script>
 
