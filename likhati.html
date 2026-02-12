@@ -6,7 +6,7 @@
 
 <title>Likhati | CORENG</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
 
 <style>
 
@@ -14,7 +14,6 @@
   --dark:#2b1d12;
   --brown:#4b2e1a;
   --gold:#d4b06a;
-  --cream:#fbf7f2;
 }
 
 body{
@@ -48,13 +47,11 @@ header{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  flex-wrap:wrap;
 }
 
 .logo{
   font-family:'Merriweather',serif;
   font-size:26px;
-  letter-spacing:2px;
 }
 
 nav ul{
@@ -62,13 +59,11 @@ nav ul{
   display:flex;
   gap:20px;
   padding:0;
-  margin:0;
 }
 
 nav a{
   color:white;
   text-decoration:none;
-  font-size:14px;
 }
 
 nav a:hover{
@@ -79,15 +74,6 @@ nav a:hover{
 .page-title{
   text-align:center;
   padding:35px 15px;
-}
-
-.page-title h1{
-  margin:0;
-  font-family:'Merriweather',serif;
-}
-
-.page-title p{
-  opacity:0.8;
 }
 
 /* CONTAINER */
@@ -115,13 +101,36 @@ nav a:hover{
 
 .card small{
   display:block;
-  margin:8px 0 15px;
+  margin:10px 0;
   color:#666;
 }
 
 .isi{
-  white-space:pre-line;
   line-height:1.8;
+  white-space:pre-line;
+  max-height:140px;
+  overflow:hidden;
+  transition:0.3s;
+}
+
+.isi.full{
+  max-height:none;
+}
+
+/* BUTTON */
+.btn{
+  display:inline-block;
+  margin-top:12px;
+  padding:6px 12px;
+  background:#2563eb;
+  color:white;
+  border-radius:6px;
+  font-size:13px;
+  cursor:pointer;
+}
+
+.btn:hover{
+  background:#1e40af;
 }
 
 /* FOOTER */
@@ -129,7 +138,6 @@ footer{
   background:#1c1917;
   text-align:center;
   padding:20px;
-  font-size:14px;
   color:#aaa;
 }
 
@@ -159,7 +167,7 @@ footer{
 
 <!-- JUDUL -->
 <section class="page-title">
-  <h1>Kumpulan Likhati</h1>
+  <h1>Likhati</h1>
   <p>CORENG • Lorong Literasi</p>
 </section>
 
@@ -174,11 +182,11 @@ footer{
 </footer>
 
 
-<!-- SCRIPT -->
 <script>
 
-// GANTI DENGAN API YANG SAMA DENGAN INDEX.HTML
 const API_URL = "https://script.google.com/macros/s/AKfycby_M2P-eeuDh4cNIaeNi-WmfKEKLvsHSmHx5Meva-bysSMtIEElRXP5hUmK1mLC1sBRqw/exec";
+
+let dataLikhati = [];
 
 fetch(API_URL)
 .then(res => res.json())
@@ -187,42 +195,47 @@ fetch(API_URL)
   const list = document.getElementById("karyaList");
   list.innerHTML = "";
 
-  // FILTER LIKHATI + PUBLISH
-  const likhati = data.filter(d =>
+
+  // FILTER LIKHATI
+  dataLikhati = data.filter(d =>
     d.jenis &&
-    d.jenis.toLowerCase() === "likhati" &&
     d.status &&
-    d.status.toLowerCase() === "publish"
+    d.jenis.toLowerCase().includes("likhati") &&
+    d.status.toLowerCase().includes("publish")
   );
 
-  if(likhati.length === 0){
-    list.innerHTML = "<p>📭 Belum ada likhati yang dipublish.</p>";
+
+  if(dataLikhati.length === 0){
+    list.innerHTML = "<p>Belum ada likhati yang dipublish.</p>";
     return;
   }
 
-  likhati.reverse().forEach(d => {
+
+  dataLikhati.reverse().forEach((d,i)=>{
 
     const card = document.createElement("div");
-    card.className = "card";
+    card.className="card";
 
-    let lampiran = "";
 
-    if(d.link){
-      lampiran = `
-        <p style="margin-top:10px">
-          📎 <a href="${d.link}" target="_blank"
-          style="color:#2563eb;font-weight:600">
-          Lihat Lampiran
-          </a>
-        </p>
-      `;
-    }
+    const ringkas = d.isi.length>300
+      ? d.isi.substring(0,300)+"..."
+      : d.isi;
 
-    card.innerHTML = `
+
+    card.innerHTML=`
+
       <h3>${d.judul}</h3>
       <small>✍️ ${d.nama}</small>
-      <p class="isi">${d.isi}</p>
-      ${lampiran}
+
+      <p class="isi" id="isi-${i}">
+        ${ringkas}
+      </p>
+
+      <span class="btn"
+        onclick="toggleIsi(${i},this)">
+        Baca selengkapnya
+      </span>
+
     `;
 
     list.appendChild(card);
@@ -230,16 +243,45 @@ fetch(API_URL)
   });
 
 })
-.catch(err => {
+.catch(err=>{
 
-  document.getElementById("karyaList").innerHTML =
+  document.getElementById("karyaList").innerHTML=
     "<p>❌ Gagal mengambil data.</p>";
 
   console.error(err);
 
 });
 
+
+// TOGGLE
+function toggleIsi(i,btn){
+
+  const el=document.getElementById("isi-"+i);
+  const data=dataLikhati[dataLikhati.length-1-i];
+
+
+  if(el.classList.contains("full")){
+
+    const ringkas=data.isi.length>300
+      ? data.isi.substring(0,300)+"..."
+      : data.isi;
+
+    el.innerText=ringkas;
+    el.classList.remove("full");
+    btn.innerText="Baca selengkapnya";
+
+  }else{
+
+    el.innerText=data.isi;
+    el.classList.add("full");
+    btn.innerText="Tutup";
+
+  }
+
+}
+
 </script>
+
 
 </body>
 </html>
