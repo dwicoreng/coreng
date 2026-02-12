@@ -10,6 +10,7 @@
 
 <style>
 
+/* WARNA */
 :root{
   --dark:#2b1d12;
   --brown:#4b2e1a;
@@ -54,7 +55,6 @@ header{
 .logo{
   font-family:'Merriweather',serif;
   font-size:26px;
-  letter-spacing:2px;
 }
 
 nav ul{
@@ -86,15 +86,11 @@ nav a:hover{
   font-family:'Merriweather',serif;
 }
 
-.page-title p{
-  opacity:0.8;
-}
-
 /* CONTAINER */
 .container{
   max-width:900px;
   margin:auto;
-  padding:20px 15px 50px;
+  padding:15px;
 }
 
 /* CARD */
@@ -119,9 +115,26 @@ nav a:hover{
   color:#666;
 }
 
+/* ISI */
 .isi{
-  white-space:pre-line;
-  line-height:1.8;
+  line-height:1.9;
+  font-size:16px;
+  max-height:120px;
+  overflow:hidden;
+}
+
+.isi.full{
+  max-height:none;
+}
+
+/* BACA */
+.baca-btn{
+  display:inline-block;
+  margin-top:8px;
+  color:#2563eb;
+  cursor:pointer;
+  font-weight:600;
+  font-size:14px;
 }
 
 /* FOOTER */
@@ -140,90 +153,146 @@ footer{
 
 <!-- HEADER -->
 <header>
-  <div class="header-box">
+<div class="header-box">
 
-    <div class="logo">CORENG</div>
+  <div class="logo">CORENG</div>
 
-    <nav>
-      <ul>
-        <li><a href="index.html">Beranda</a></li>
-        <li><a href="puisi.html">Puisi</a></li>
-        <li><a href="cerpen.html">Cerpen</a></li>
-        <li><a href="likhati.html">Likhati</a></li>
-        <li><a href="kirim.html">Kirim Karya</a></li>
-      </ul>
-    </nav>
+  <nav>
+    <ul>
+      <li><a href="index.html">Beranda</a></li>
+      <li><a href="puisi.html">Puisi</a></li>
+      <li><a href="cerpen.html">Cerpen</a></li>
+      <li><a href="likhati.html">Likhati</a></li>
+      <li><a href="kirim.html">Kirim Karya</a></li>
+      <li><a href="penulis.html">Penulis</a></li>
+    </ul>
+  </nav>
 
-  </div>
+</div>
 </header>
 
 <!-- JUDUL -->
 <section class="page-title">
-  <h1>Kumpulan Puisi</h1>
-  <p>CORENG • Lorong Literasi</p>
+<h1>Kumpulan Puisi</h1>
+<p>CORENG • Lorong Literasi</p>
 </section>
 
 <!-- DATA -->
 <div class="container" id="karyaList">
-
-  <p>⏳ Memuat puisi...</p>
-
+<p>⏳ Memuat puisi...</p>
 </div>
 
 <!-- FOOTER -->
 <footer>
-  © 2026 CORENG • Lorong Literasi 
+© 2026 CORENG • Lorong Literasi
 </footer>
 
 
-<!-- SCRIPT -->
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycby_M2P-eeuDh4cNIaeNi-WmfKEKLvsHSmHx5Meva-bysSMtIEElRXP5hUmK1mLC1sBRqw/exec";
+/* API */
+const API_URL =
+"https://script.google.com/macros/s/AKfycby_M2P-eeuDh4cNIaeNi-WmfKEKLvsHSmHx5Meva-bysSMtIEElRXP5hUmK1mLC1sBRqw/exec";
 
+
+/* LOAD */
 fetch(API_URL)
-.then(res => res.json())
+.then(r => r.json())
 .then(data => {
 
-  const list = document.getElementById("karyaList");
-  list.innerHTML = "";
-
   const puisi = data.filter(d =>
-    d.jenis === "Puisi" && d.status === "Publish"
+
+    d.jenis &&
+    d.jenis.toLowerCase() === "puisi" &&
+
+    d.status &&
+    d.status.toLowerCase() === "publish"
+
   );
 
-  if(puisi.length === 0){
-    list.innerHTML = "<p>Belum ada puisi yang dipublish.</p>";
-    return;
-  }
-
-  puisi.forEach(d => {
-
-    const card = document.createElement("div");
-    card.className = "card";
-
-    card.innerHTML = `
-      <h3>${d.judul}</h3>
-      <small>✍️ ${d.nama}</small>
-      <p class="isi">${d.isi}</p>
-    `;
-
-    list.appendChild(card);
-
-  });
+  tampilkan(puisi);
 
 })
 .catch(err => {
 
   document.getElementById("karyaList").innerHTML =
-    "<p>❌ Gagal mengambil data.</p>";
+  "<p>❌ Gagal mengambil data</p>";
 
   console.error(err);
 
 });
 
+
+/* TAMPIL */
+function tampilkan(data){
+
+  const box = document.getElementById("karyaList");
+  box.innerHTML = "";
+
+  if(data.length === 0){
+    box.innerHTML = "<p>😔 Belum ada puisi</p>";
+    return;
+  }
+
+  data.slice().reverse().forEach(d => {
+
+    const card = document.createElement("div");
+    card.className="card";
+
+
+    let lampiran="";
+
+    if(d.link){
+      lampiran=`
+      <p style="margin-top:8px">
+      📎 <a href="${d.link}" target="_blank">
+      Lihat Lampiran</a>
+      </p>`;
+    }
+
+
+    card.innerHTML=`
+
+    <h3>${d.judul}</h3>
+
+    <small>✍️ ${d.nama}</small>
+
+    <div class="isi">
+      ${d.isi.replace(/\n/g,"<br>")}
+    </div>
+
+    <span class="baca-btn">
+    📖 Baca Selengkapnya
+    </span>
+
+    ${lampiran}
+
+    `;
+
+    box.appendChild(card);
+
+
+    /* TOGGLE */
+    const btn=card.querySelector(".baca-btn");
+    const isi=card.querySelector(".isi");
+
+    btn.addEventListener("click",()=>{
+
+      if(isi.classList.contains("full")){
+        isi.classList.remove("full");
+        btn.innerText="📖 Baca Selengkapnya";
+      }else{
+        isi.classList.add("full");
+        btn.innerText="🔽 Tutup";
+      }
+
+    });
+
+  });
+
+}
+
 </script>
 
 </body>
 </html>
-
