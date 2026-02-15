@@ -2,70 +2,17 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>CORENG - Daftar Penulis</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CORENG - Penulis</title>
 <link rel="stylesheet" href="style.css">
-<style>
-#penulisContainer{
-  max-width:800px;
-  margin:40px auto;
-}
-
-.penulis-card{
-  background-color:#f4e6cd;
-  color:#3a2518;
-  padding:20px;
-  border-radius:10px;
-  margin-bottom:15px;
-  box-shadow:0 4px 15px rgba(0,0,0,0.3);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  transition:0.3s;
-}
-
-.penulis-card:hover{
-  transform:translateY(-3px);
-}
-
-.penulis-info{
-  display:flex;
-  align-items:center;
-  gap:15px;
-}
-
-.penulis-info img{
-  width:50px;
-  height:50px;
-  border-radius:50%;
-  object-fit:cover;
-}
-
-.penulis-info h3{
-  margin:0;
-  font-size:18px;
-}
-
-.penulis-info h3 a{
-  color:#3a2518;
-  text-decoration:none;
-}
-
-.penulis-info h3 a:hover{
-  text-decoration:underline;
-}
-
-.penulis-info small{
-  display:block;
-  font-size:12px;
-  color:#6e4b2e;
-}
-</style>
+<link rel="stylesheet" href="style-mobile.css">
 </head>
 <body>
 
 <nav>
   <div class="logo">CORENG</div>
-  <div>
+  <div id="menuToggle">&#9776;</div>
+  <div class="menu">
     <a href="index.html">Beranda</a>
     <a href="puisi.html">Puisi</a>
     <a href="cerpen.html">Cerpen</a>
@@ -75,58 +22,35 @@
   </div>
 </nav>
 
-<section class="hero">
-  <h1>Daftar Penulis</h1>
-  <p>Lihat semua penulis dan jumlah karya yang telah dikirim</p>
-</section>
+<section id="daftarPenulis"></section>
 
-<div id="penulisContainer"></div>
-
-<footer>
-  © 2026 CORENG - Portal Literasi Sekolah
-</footer>
+<footer>© 2026 CORENG - Portal Literasi Sekolah</footer>
 
 <script>
-const url = "https://script.google.com/macros/s/AKfycbwAYPlfKkUQk3-uQUC1XUxUQ-3hqDG2qZWuw0vdOc1ZkGpu8BJe0446yNZUBs0yGL9RPw/exec"; // Ganti dengan URL Web App
+const url = "https://script.google.com/macros/s/AKfycbwAYPlfKkUQk3-uQUC1XUxUQ-3hqDG2qZWuw0vdOc1ZkGpu8BJe0446yNZUBs0yGL9RPw/exec";
+
+const menuToggle = document.getElementById("menuToggle");
+const menu = document.querySelector("nav .menu");
+menuToggle.addEventListener("click", ()=> menu.classList.toggle("show"));
 
 fetch(url+"?action=getKarya")
-.then(res => res.json())
-.then(data => {
-  // Hitung jumlah karya per penulis
+.then(res=>res.json())
+.then(data=>{
   const penulisMap = {};
-  data.forEach(d => {
-    const nama = d[2];
-    if(penulisMap[nama]){
-      penulisMap[nama].count += 1;
-      if(!penulisMap[nama].foto && d[9]) penulisMap[nama].foto = d[9];
-    } else {
-      penulisMap[nama] = {count:1, foto:d[9] || 'default.png'};
+  data.forEach(k=>{
+    if(k[7]!="hapus" && !penulisMap[k[2]]){
+      penulisMap[k[2]] = k[9]||"";
     }
   });
 
-  // Ubah ke array dan urutkan alphabet
-  const penulisList = Object.keys(penulisMap).map(nama => ({
-    nama: nama,
-    count: penulisMap[nama].count,
-    foto: penulisMap[nama].foto
-  })).sort((a,b)=>a.nama.localeCompare(b.nama));
-
-  // Tampilkan
-  let html = "";
-  penulisList.forEach(p => {
-    html += `
-      <div class="penulis-card">
-        <div class="penulis-info">
-          <img src="${p.foto}">
-          <div>
-            <h3><a href="penulis-detail.html?nama=${encodeURIComponent(p.nama)}">${p.nama}</a></h3>
-            <small>${p.count} karya</small>
-          </div>
-        </div>
-      </div>
-    `;
+  let html="";
+  Object.keys(penulisMap).forEach(n=>{
+    html+=`<div class="penulis-card" onclick="location='penulis-detail.html?nama=${encodeURIComponent(n)}'">
+             <h3>${n}</h3>
+           </div>`;
   });
-  document.getElementById("penulisContainer").innerHTML = html;
+  if(!html) html="<p>Belum ada penulis.</p>";
+  document.getElementById("daftarPenulis").innerHTML=html;
 });
 </script>
 
