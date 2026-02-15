@@ -33,21 +33,9 @@ nav .logo {
   color: #f0d8a8;
 }
 
-nav a {
-  color: #e6cba8;
-  text-decoration: none;
-  margin-left: 25px;
-  font-size: 16px;
-}
-
-nav a:hover {
-  color: white;
-  border-bottom: 1px solid #caa86b;
-}
-
 /* HERO */
 .hero {
-  padding: 100px 80px;
+  padding: 100px 80px 40px 80px;
   max-width: 900px;
 }
 
@@ -109,6 +97,25 @@ nav a:hover {
   margin-top: 15px;
 }
 
+/* LIKE */
+.like-section {
+  margin-top: 15px;
+}
+
+.like-btn {
+  background-color: #8b5e34;
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-left: 10px;
+}
+
+.like-btn:hover {
+  background-color: #6e4b2e;
+}
+
 .card a {
   display: inline-block;
   margin-top: 15px;
@@ -135,12 +142,6 @@ footer {
 
 <nav>
   <div class="logo">CORENG</div>
-  <div>
-    <a href="#">Beranda</a>
-    <a href="#">Puisi</a>
-    <a href="#">Cerpen</a>
-    <a href="#">Kirim Karya</a>
-  </div>
 </nav>
 
 <section class="hero">
@@ -159,7 +160,7 @@ footer {
 </footer>
 
 <script>
-const url = "https://script.google.com/macros/s/AKfycbx75opexEOcvIiSVSBc5KE0eYf7wtCBmjIfU1bHhssUpUVZE22rRWVg5vtz2ClTnNnN0w/exec"; // GANTI DENGAN LINK /exec
+const url = "https://script.google.com/macros/s/AKfycbx75opexEOcvIiSVSBc5KE0eYf7wtCBmjIfU1bHhssUpUVZE22rRWVg5vtz2ClTnNnN0w/exec";
 
 fetch(url + "?action=getKarya")
 .then(res => res.json())
@@ -171,22 +172,32 @@ fetch(url + "?action=getKarya")
     let html = "";
 
     semuaData.forEach(k => {
-      if (k[7] == "Tampil") {   // Sesuaikan kolom Status
+
+      if (k[7] == "Tampil") {
+
         if (
           k[4].toLowerCase().includes(filter) ||
           k[2].toLowerCase().includes(filter) ||
           k[5].toLowerCase().includes(filter)
         ) {
+
           html += `
             <div class="card">
               <h3>${k[4]}</h3>
               <small>${k[2]} | ${k[3]}</small>
               <p>${k[5].substring(0, 200)}...</p>
+
+              <div class="like-section">
+                ❤️ <span id="like-${k[0]}">${k[10] || 0}</span>
+                <button class="like-btn" onclick="like('${k[0]}')">Suka</button>
+              </div>
+
               <a href="karya.html?id=${k[0]}">Baca Selengkapnya</a>
             </div>
           `;
         }
       }
+
     });
 
     document.getElementById("karya").innerHTML = html;
@@ -199,6 +210,15 @@ fetch(url + "?action=getKarya")
   });
 
 });
+
+/* LIKE FUNCTION */
+function like(id){
+  fetch(url + "?action=like&id=" + id)
+  .then(() => {
+    let el = document.getElementById("like-" + id);
+    el.innerText = parseInt(el.innerText) + 1;
+  });
+}
 </script>
 
 </body>
