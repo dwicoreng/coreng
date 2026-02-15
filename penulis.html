@@ -2,47 +2,62 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CORENG - Penulis</title>
+<title>CORENG - Daftar Penulis</title>
+<link rel="stylesheet" href="style.css">
 <style>
-/* ===== Umum ===== */
-body { margin:0; padding:0; font-family:'Arial', sans-serif; background:#fff; color:#333; line-height:1.5; }
-a { text-decoration:none; color:inherit; }
-section { padding:20px; }
-
-/* ===== Navigasi ===== */
-nav {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  flex-wrap:wrap;
-  background:#2c3e50;
-  color:white;
-  padding:10px 20px;
-  position:sticky;
-  top:0;
-  z-index:1000;
+#penulisContainer{
+  max-width:800px;
+  margin:40px auto;
 }
-nav .logo { font-weight:bold; font-size:1.2em; }
-nav #menuToggle { display:none; font-size:1.5em; cursor:pointer; }
-nav .menu { display:flex; flex-wrap:wrap; }
-nav .menu a { color:white; margin:5px 10px; font-size:0.9em; }
-nav .menu a:hover { text-decoration:underline; }
 
-/* ===== Daftar Penulis ===== */
-#daftarPenulis { max-width:700px; margin:20px auto; display:grid; grid-template-columns:1fr; gap:15px; }
-.penulis-card { background:#f4e6cd; padding:15px; border-radius:8px; display:flex; align-items:center; cursor:pointer; transition:0.2s; }
-.penulis-card:hover { background:#e6d0b0; }
-.penulis-card img { width:50px; height:50px; border-radius:50%; object-fit:cover; margin-right:15px; }
-.penulis-card h3 { margin:0; font-size:1em; }
+.penulis-card{
+  background-color:#f4e6cd;
+  color:#3a2518;
+  padding:20px;
+  border-radius:10px;
+  margin-bottom:15px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.3);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  transition:0.3s;
+}
 
-/* ===== Footer ===== */
-footer { text-align:center; padding:15px; background:#f1f1f1; font-size:0.9em; color:#555; }
+.penulis-card:hover{
+  transform:translateY(-3px);
+}
 
-/* ===== Mobile ===== */
-@media screen and (max-width:700px){
-  nav .menu { display:none; width:100%; flex-direction:column; margin-top:10px; }
-  nav .menu.show { display:flex; }
+.penulis-info{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.penulis-info img{
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  object-fit:cover;
+}
+
+.penulis-info h3{
+  margin:0;
+  font-size:18px;
+}
+
+.penulis-info h3 a{
+  color:#3a2518;
+  text-decoration:none;
+}
+
+.penulis-info h3 a:hover{
+  text-decoration:underline;
+}
+
+.penulis-info small{
+  display:block;
+  font-size:12px;
+  color:#6e4b2e;
 }
 </style>
 </head>
@@ -50,8 +65,7 @@ footer { text-align:center; padding:15px; background:#f1f1f1; font-size:0.9em; c
 
 <nav>
   <div class="logo">CORENG</div>
-  <div id="menuToggle">&#9776;</div>
-  <div class="menu">
+  <div>
     <a href="index.html">Beranda</a>
     <a href="puisi.html">Puisi</a>
     <a href="cerpen.html">Cerpen</a>
@@ -61,42 +75,58 @@ footer { text-align:center; padding:15px; background:#f1f1f1; font-size:0.9em; c
   </div>
 </nav>
 
-<section id="daftarPenulis">
-  <!-- Daftar penulis akan di-load lewat JS -->
+<section class="hero">
+  <h1>Daftar Penulis</h1>
+  <p>Lihat semua penulis dan jumlah karya yang telah dikirim</p>
 </section>
 
-<footer>© 2026 CORENG - Lorong Literasi Sekolah</footer>
+<div id="penulisContainer"></div>
+
+<footer>
+  © 2026 CORENG - Portal Literasi Sekolah
+</footer>
 
 <script>
-const url = "https://script.google.com/macros/s/AKfycbwAYPlfKkUQk3-uQUC1XUxUQ-3hqDG2qZWuw0vdOc1ZkGpu8BJe0446yNZUBs0yGL9RPw/exec"; // ganti dengan URL Apps Script
+const url = "https://script.google.com/macros/s/AKfycbwAYPlfKkUQk3-uQUC1XUxUQ-3hqDG2qZWuw0vdOc1ZkGpu8BJe0446yNZUBs0yGL9RPw/exec"; // Ganti dengan URL Web App
 
-// Toggle menu hamburger
-const menuToggle = document.getElementById("menuToggle");
-const menu = document.querySelector("nav .menu");
-menuToggle.addEventListener("click", ()=> menu.classList.toggle("show"));
-
-// Load daftar penulis unik
 fetch(url+"?action=getKarya")
-.then(res=>res.json())
-.then(data=>{
-  // Ambil penulis unik yang status karya aktif
+.then(res => res.json())
+.then(data => {
+  // Hitung jumlah karya per penulis
   const penulisMap = {};
-  data.forEach(k=>{
-    if(k[7]!=="hapus" && !penulisMap[k[2]]){ // k[2] = Nama penulis, k[7] = Status
-      penulisMap[k[2]] = { nama: k[2], foto: k[9]||"" }; // k[9] = Foto Profil
+  data.forEach(d => {
+    const nama = d[2];
+    if(penulisMap[nama]){
+      penulisMap[nama].count += 1;
+      if(!penulisMap[nama].foto && d[9]) penulisMap[nama].foto = d[9];
+    } else {
+      penulisMap[nama] = {count:1, foto:d[9] || 'default.png'};
     }
   });
 
-  let html = "";
-  Object.values(penulisMap).forEach(p=>{
-    html+=`<div class="penulis-card" onclick="window.location='penulis-detail.html?nama=${encodeURIComponent(p.nama)}'">
-             <img src="${p.foto || 'https://via.placeholder.com/50'}" alt="${p.nama}">
-             <h3>${p.nama}</h3>
-           </div>`;
-  });
+  // Ubah ke array dan urutkan alphabet
+  const penulisList = Object.keys(penulisMap).map(nama => ({
+    nama: nama,
+    count: penulisMap[nama].count,
+    foto: penulisMap[nama].foto
+  })).sort((a,b)=>a.nama.localeCompare(b.nama));
 
-  if(html==="") html="<p>Belum ada penulis.</p>";
-  document.getElementById("daftarPenulis").innerHTML = html;
+  // Tampilkan
+  let html = "";
+  penulisList.forEach(p => {
+    html += `
+      <div class="penulis-card">
+        <div class="penulis-info">
+          <img src="${p.foto}">
+          <div>
+            <h3><a href="penulis-detail.html?nama=${encodeURIComponent(p.nama)}">${p.nama}</a></h3>
+            <small>${p.count} karya</small>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+  document.getElementById("penulisContainer").innerHTML = html;
 });
 </script>
 
