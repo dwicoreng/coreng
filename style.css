@@ -1,243 +1,104 @@
-/* ===== FONT GOOGLE ===== */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:wght@400;500&display=swap');
-
-/* ===== BODY ===== */
+/* ===== Mobile-Friendly CSS ===== */
 body {
-  margin: 0;
-  font-family: 'Cormorant Garamond', serif;
-  background-color: #2b1d14;
-  background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-  color: #f5e6cc;
-  line-height: 1.8;
+    margin:0;
+    padding:0;
+    font-family:Arial, sans-serif;
+    line-height:1.5;
 }
 
-/* ===== NAVBAR ===== */
 nav {
-  background: linear-gradient(to right, #1f140d, #3a2518);
-  padding: 18px 60px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    background:#2c3e50;
+    color:white;
+    padding:10px 15px;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+#menuToggle {
+    font-size:1.5em;
+    cursor:pointer;
+    display:block;
+}
+nav .menu {
+    display:none;
+    flex-direction:column;
+    width:100%;
+}
+nav .menu.show {
+    display:flex;
+}
+nav .menu a {
+    display:block;
+    margin:8px 0;
+    font-size:1em;
+    color:white;
+    text-decoration:none;
 }
 
-nav .logo {
-  font-family: 'Playfair Display', serif;
-  font-size: 28px;
-  letter-spacing: 2px;
-  color: #f0d8a8;
+section { padding:15px; }
+
+#daftarKarya, #daftarPenulis {
+    display:grid;
+    grid-template-columns:1fr;
+    gap:12px;
+}
+.karya-card, .penulis-card {
+    padding:12px;
+    border-radius:8px;
+    background:#f4e6cd;
+    cursor:pointer;
+    transition:0.2s;
+}
+.karya-card:hover, .penulis-card:hover { background:#e6d0b0; }
+
+/* KOMENTAR & LIKE */
+#komentarContainer .komentar-card {
+    background:#f4e6cd;
+    color:#3a2518;
+    padding:12px;
+    border-radius:8px;
+    margin-bottom:12px;
+    display:flex;
+    flex-direction:column;
+}
+.komentar-card button.like-btn {
+    background:#e74c3c;
+    color:white;
+    border:none;
+    padding:5px 10px;
+    margin-top:8px;
+    border-radius:4px;
+    cursor:pointer;
+    align-self:flex-start;
+}
+.komentar-card .like-count {
+    margin-left:8px;
+    font-weight:bold;
+    display:inline-block;
 }
 
-nav a {
-  color: #e6cba8;
-  text-decoration: none;
-  margin-left: 25px;
-  font-size: 16px;
-  transition: 0.3s;
+/* LIKE KARYA */
+#likeKaryaBtn {
+    background:#e74c3c;
+    color:white;
+    border:none;
+    padding:6px 12px;
+    border-radius:5px;
+    cursor:pointer;
+    margin-top:10px;
+}
+#likeKaryaBtn:hover {
+    background:#c0392b;
 }
 
-nav a:hover {
-  color: #ffffff;
-  border-bottom: 1px solid #caa86b;
-}
-
-/* ===== HERO SECTION ===== */
-.hero {
-  padding: 100px 80px;
-  max-width: 900px;
-}
-
-.hero h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 52px;
-  margin-bottom: 10px;
-  color: #f8e7c5;
-}
-
-.hero p {
-  font-size: 20px;
-  font-style: italic;
-  opacity: 0.85;
-  color: #d6b98c;
-}
-
-/* ===== SEARCH BOX ===== */
-.search-box {
-  margin: 40px 80px;
-}
-
-.search-box input {
-  width: 100%;
-  padding: 15px 20px;
-  border-radius: 8px;
-  border: none;
-  font-size: 16px;
-  background-color: #f3e3c9;
-  color: #3b2a1d;
-}
-
-/* ===== CARD KARYA ===== */
-.card {
-  background-color: #f4e6cd;
-  color: #3a2518;
-  margin: 30px 80px;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-  transition: 0.3s;
-  display: flex;
-  gap: 15px;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-}
-
-.card img {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.card-content {
-  flex: 1;
-}
-
-.card-content h3 {
-  font-family: 'Playfair Display', serif;
-  font-size: 26px;
-  margin-bottom: 10px;
-}
-
-.card-content small {
-  color: #6e4b2e;
-}
-
-.card-content p {
-  margin-top: 15px;
-}
-
-.card-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.like-btn {
-  background: none;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  color: #e74c3c;
-}
-
-.card-content a {
-  display: inline-block;
-  margin-top: 10px;
-  color: #8b5e34;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.card-content a:hover {
-  text-decoration: underline;
-}
-
-/* ===== FOOTER ===== */
 footer {
-  text-align: center;
-  padding: 40px;
-  background-color: #1f140d;
-  font-size: 14px;
-  color: #cbb38a;
-}
-/* ===== RESPONSIVE DESIGN ===== */
-@media screen and (max-width: 900px) {
-  nav {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 15px 20px;
-  }
-
-  nav div a {
-    margin-left: 0;
-    margin-top: 10px;
-  }
-
-  .hero {
-    padding: 60px 20px;
-    max-width: 100%;
-  }
-
-  .hero h1 {
-    font-size: 40px;
-  }
-
-  .hero p {
-    font-size: 18px;
-  }
-
-  .search-box {
-    margin: 20px;
-  }
-
-  .search-box input {
-    font-size: 14px;
-    padding: 12px 15px;
-  }
-
-  .card {
-    flex-direction: column;
-    margin: 20px;
-    padding: 20px;
-  }
-
-  .card img {
-    width: 50px;
-    height: 50px;
-    margin-bottom: 10px;
-  }
-
-  .card-content a {
-    margin-top: 8px;
-  }
-
-  .card-footer {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 5px;
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .hero h1 {
-    font-size: 32px;
-  }
-
-  .hero p {
-    font-size: 16px;
-  }
-
-  .card {
-    padding: 15px;
-  }
-
-  nav .logo {
-    font-size: 24px;
-  }
-
-  nav div a {
-    font-size: 14px;
-  }
-
-  .search-box input {
-    font-size: 13px;
-    padding: 10px 12px;
-  }
-  
-  form, #previewCard, #komentarSection, #karyaDetail {
-    margin: 15px;
-    padding: 10px;
-  }
+    padding:12px;
+    text-align:center;
+    font-size:0.9em;
+    background:#f1f1f1;
+    color:#555;
 }
