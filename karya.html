@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>CORENG - Baca Karya</title>
+<link rel="stylesheet" href="style.css">
+<style>
+#komentarSection { max-width: 700px; margin: 40px auto; }
+#komentarContainer .komentar-card { background:#f4e6cd; color:#3a2518; padding:15px; border-radius:8px; margin-bottom:15px; }
+#komentarSection input, #komentarSection textarea, #komentarSection button { width:100%; padding:10px; margin-top:8px; border-radius:6px; border:1px solid #ccc; }
+#komentarSection button { background:#2c3e50; color:white; cursor:pointer; margin-top:10px; }
+#komentarSection button:hover { background:#34495e; }
+.komentar-card button.like-btn { background:#e74c3c; color:white; border:none; padding:5px 10px; margin-top:5px; border-radius:4px; cursor:pointer; }
+.komentar-card button.like-btn:hover { background:#c0392b; }
+.komentar-card .like-count { margin-left:8px; font-weight:bold; }
+#likeKaryaBtn { background:#e74c3c; color:white; border:none; padding:6px 12px; border-radius:5px; cursor:pointer; margin-top:10px; }
+#likeKaryaBtn:hover { background:#c0392b; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">CORENG</div>
+  <div>
+    <a href="index.html">Beranda</a>
+    <a href="puisi.html">Puisi</a>
+    <a href="cerpen.html">Cerpen</a>
+    <a href="likhati.html">Likhati</a>
+    <a href="kirim.html">Kirim Karya</a>
+    <a href="penulis.html">Penulis</a>
+  </div>
+</nav>
+
+<section id="karyaDetail" style="max-width:700px;margin:40px auto;">
+  <h1 id="judul"></h1>
+  <small id="meta"></small>
+  <p id="isi"></p>
+  <button id="likeKaryaBtn">Like ❤️</button> <span id="likeKaryaCount">0</span> likes
+</section>
+
+<section id="komentarSection">
+  <h2>Komentar</h2>
+  <div id="komentarContainer"></div>
+  <h3>Tambah Komentar</h3>
+  <input type="text" id="namaInput" placeholder="Nama">
+  <textarea id="komentarInput" placeholder="Tulis komentar..."></textarea>
+  <button id="kirimKomentar">Kirim</button>
+</section>
+
+<footer>© 2026 CORENG - Portal Literasi Sekolah</footer>
+
+<script>
+const url = "https://script.google.com/macros/s/AKfycbwAYPlfKkUQk3-uQUC1XUxUQ-3hqDG2qZWuw0vdOc1ZkGpu8BJe0446yNZUBs0yGL9RPw/exec"; // ganti
+
+const params = new URLSearchParams(window.location.search);
+const idKarya = params.get("id");
+
+// ===== TAMPILKAN KARYA =====
+fetch(url+"?action=getKarya")
+.then(res=>res.json())
+.then(data=>{
+  const karya = data.find(d=>d[0]==idKarya);
+  if(karya){
+    document.getElementById("judul").innerText=karya[4];
+    document.getElementById("meta").innerText=`✍ ${karya[3]} | ${karya[2]}`;
+    document.getElementById("isi").innerText=karya[5];
+    document.getElementById("likeKaryaCount").innerText = karya[10] || 0;
+  } else {
+    document.getElementById("karyaDetail").innerHTML="<p>Karya tidak ditemukan.</p>";
+  }
+});
+
+// ===== LIKE KARYA =====
+document.getElementById("likeKaryaBtn").addEventListener("click", ()=>{
+  const currentLikes = parseInt(document.getElementById("likeKaryaCount").innerText) || 0;
+  fetch(url,{
+    method:"POST",
+    body:JSON.stringify({action:"likeKarya", idKarya:idKarya})
+  })
+  .then(res=>res.json())
+  .then(res=>{
+    if(res.status=="success") document.getElementById("likeKaryaCount").innerText = currentLikes + 1;
+    else alert("Gagal menambahkan like karya.");
+  });
+});
+
+// ===== KOMENTAR =====
+function loadKomentar(){
+  fetch(url+"?action=getKomentar&id="+idKarya)
+  .then(res=>res.json())
+  .then(data=>{
+    let html="";
+    data.forEach((k)=>{
+      let likeCount = k[5] || 0; 
+      const idKomentar = k[6]; 
+      html+=`<div class="komentar-card">
+               <strong>${k[1]}</strong> <small>${new Date(k[3]).toLocaleString()}</small>
+               <p>${k[2]}</p>
+               <button class="like-btn" data-id="${idKomentar}">Like ❤️</button>
+               <span class="like-count">${likeCount}</span>
+             </div>`;
+    });
+    if(html=="") html="<p>Belum ada komentar.</p>";
+    document.getElementById("komentarContainer").innerHTML=html;
+
+    document.querySelectorAll(".like-btn").forEach((btn)=>{
+      btn.addEventListener("click", ()=>{
+        const idKomentar = btn.dataset.id;
+        fetch(url,{
+          method:"POST",
+          body:JSON.stringify({action:"likeKomentar", idKomentar:idKomentar})
+        })
+        .then(res=>res.json())
+        .then(res=>{
+          if(res.status=="success") loadKomentar();
+          else alert("Gagal menambahkan like komentar.");
+        });
+      });
+    });
+  });
+}
+
+loadKomentar();
+
+// ===== TAMBAH KOMENTAR =====
+document.getElementById("kirimKomentar").addEventListener("click", ()=>{
+  const nama = document.getElementById("namaInput").value.trim();
+  const komentar = document.getElementById("komentarInput").value.trim();
+  if(!nama || !komentar){ alert("Nama dan komentar wajib diisi!"); return; }
+
+  fetch(url,{
+    method:"POST",
+    body:JSON.stringify({action:"addKomentar", idKarya:idKarya, nama:nama, komentar:komentar})
+  })
+  .then(res=>res.json())
+  .then(res=>{
+    if(res.status=="success"){
+      document.getElementById("namaInput").value="";
+      document.getElementById("komentarInput").value="";
+      loadKomentar();
+    } else alert("Gagal mengirim komentar.");
+  });
+});
+</script>
+</body>
+</html>
