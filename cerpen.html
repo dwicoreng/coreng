@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Puisi | CORENG</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Georgia,serif;
+  background:#3a2615;
+  color:#f3e9d7;
+}
+
+header{
+  background:#1c1917;
+  padding:20px;
+  text-align:center;
+}
+
+header a{
+  color:white;
+  margin:0 10px;
+  text-decoration:none;
+}
+
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:30px 15px;
+}
+
+.card{
+  background:white;
+  color:#222;
+  padding:20px;
+  border-radius:10px;
+  margin-bottom:20px;
+}
+
+.card h3{margin:0}
+
+.meta{
+  font-size:13px;
+  color:#666;
+}
+
+.btn{
+  display:inline-block;
+  margin-top:10px;
+  background:#6b4226;
+  color:white;
+  padding:6px 12px;
+  border-radius:6px;
+  text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <a href="index.html">Beranda</a>
+  <a href="puisi.html">Puisi</a>
+  <a href="cerpen.html">Cerpen</a>
+  <a href="likhati.html">Likhati</a>
+  <a href="penulis.html">Penulis</a>
+</header>
+
+<div class="container" id="list">Loading...</div>
+
+<script>
+const API_URL="PASTE_URL";
+
+fetch(API_URL)
+.then(r=>r.json())
+.then(data=>{
+
+  const cerpen=data.filter(d=>d.jenis==="Cerpen");
+
+  let html="";
+
+  cerpen.forEach(d=>{
+
+    html+=`
+
+      <div class="card">
+        <h3>${d.judul}</h3>
+        <div class="meta">✍️ ${d.nama}</div>
+        <a class="btn" href="karya.html?id=${d.id}">Baca</a>
+      </div>
+
+    `;
+
+  });
+
+  document.getElementById("list").innerHTML=html;
+
+});
+</script>
+
+
+
+</body>
+</html>
