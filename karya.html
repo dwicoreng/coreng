@@ -2,46 +2,39 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CORENG - Baca Karya</title>
 <link rel="stylesheet" href="style.css">
 <style>
-body { font-family: 'Arial', sans-serif; line-height:1.6; margin:0; padding:0; background:#fff; color:#333; }
-nav { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; padding:10px 20px; background:#2c3e50; color:white; }
-nav .logo { font-weight:bold; font-size:1.2em; }
-nav a { color:white; text-decoration:none; margin:5px 10px; font-size:0.9em; }
-nav a:hover { text-decoration:underline; }
-section { padding:20px; }
-#karyaDetail { max-width:700px; margin:20px auto; }
-#karyaDetail h1 { font-size:1.5em; margin-bottom:10px; }
-#karyaDetail small { display:block; margin-bottom:15px; color:#555; }
-#karyaDetail p { font-size:1em; line-height:1.5; }
-#likeKaryaBtn { background:#e74c3c; color:white; border:none; padding:10px 16px; border-radius:5px; cursor:pointer; font-size:1em; margin-top:10px; }
-#likeKaryaBtn:hover { background:#c0392b; }
+#komentarSection {
+  max-width: 700px;
+  margin: 40px auto;
+}
 
-#komentarSection { max-width:700px; margin:30px auto; }
-#komentarSection input, #komentarSection textarea, #komentarSection button { width:100%; padding:12px; margin-top:10px; border-radius:6px; border:1px solid #ccc; font-size:1em; }
-#komentarSection button { background:#2c3e50; color:white; cursor:pointer; margin-top:10px; }
-#komentarSection button:hover { background:#34495e; }
+#komentarContainer .komentar-card {
+  background-color: #f4e6cd;
+  color: #3a2518;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
 
-.komentar-card { background:#f4e6cd; padding:15px; border-radius:8px; margin-bottom:15px; word-wrap: break-word; }
-.komentar-card strong { font-size:1em; }
-.komentar-card small { font-size:0.8em; color:#555; }
-.komentar-card p { font-size:0.95em; margin:8px 0; }
-.komentar-card button.like-btn { background:#e74c3c; color:white; border:none; padding:6px 10px; border-radius:4px; cursor:pointer; font-size:0.9em; margin-top:5px; }
-.komentar-card button.like-btn:hover { background:#c0392b; }
-.komentar-card .like-count { margin-left:6px; font-weight:bold; }
+#komentarSection input, #komentarSection textarea, #komentarSection button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
 
-footer { text-align:center; padding:15px; background:#f1f1f1; font-size:0.9em; color:#555; }
+#komentarSection button {
+  background-color: #2c3e50;
+  color: white;
+  cursor: pointer;
+  margin-top: 10px;
+}
 
-@media screen and (max-width:480px){
-  nav { flex-direction:column; align-items:flex-start; }
-  nav a { margin:5px 0; }
-  #karyaDetail h1 { font-size:1.3em; }
-  #karyaDetail p { font-size:0.95em; }
-  #komentarSection input, #komentarSection textarea, #komentarSection button { font-size:0.95em; padding:10px; }
-  .komentar-card p { font-size:0.9em; }
-  .komentar-card button.like-btn { font-size:0.85em; padding:5px 8px; }
+#komentarSection button:hover {
+  background-color: #34495e;
 }
 </style>
 </head>
@@ -59,31 +52,33 @@ footer { text-align:center; padding:15px; background:#f1f1f1; font-size:0.9em; c
   </div>
 </nav>
 
-<section id="karyaDetail">
+<section id="karyaDetail" style="max-width:700px;margin:40px auto;">
   <h1 id="judul"></h1>
   <small id="meta"></small>
   <p id="isi"></p>
-  <button id="likeKaryaBtn">Like ❤️</button> <span id="likeKaryaCount">0</span> likes
 </section>
 
 <section id="komentarSection">
   <h2>Komentar</h2>
   <div id="komentarContainer"></div>
+
   <h3>Tambah Komentar</h3>
   <input type="text" id="namaInput" placeholder="Nama">
   <textarea id="komentarInput" placeholder="Tulis komentar..."></textarea>
   <button id="kirimKomentar">Kirim</button>
 </section>
 
-<footer>© 2026 CORENG - Portal Literasi Sekolah</footer>
+<footer>
+  © 2026 CORENG - Portal Literasi Sekolah
+</footer>
 
 <script>
-const url = "https://script.google.com/macros/s/AKfycbwAYPlfKkUQk3-uQUC1XUxUQ-3hqDG2qZWuw0vdOc1ZkGpu8BJe0446yNZUBs0yGL9RPw/exec"; // ganti
+const url = "https://script.google.com/macros/s/AKfycbwAYPlfKkUQk3-uQUC1XUxUQ-3hqDG2qZWuw0vdOc1ZkGpu8BJe0446yNZUBs0yGL9RPw/exec"; // GANTI
 
 const params = new URLSearchParams(window.location.search);
 const idKarya = params.get("id");
 
-// Tampilkan karya
+// tampilkan karya
 fetch(url+"?action=getKarya")
 .then(res=>res.json())
 .then(data=>{
@@ -92,73 +87,39 @@ fetch(url+"?action=getKarya")
     document.getElementById("judul").innerText=karya[4];
     document.getElementById("meta").innerText=`✍ ${karya[3]} | ${karya[2]}`;
     document.getElementById("isi").innerText=karya[5];
-    document.getElementById("likeKaryaCount").innerText = karya[10] || 0;
   } else {
     document.getElementById("karyaDetail").innerHTML="<p>Karya tidak ditemukan.</p>";
   }
 });
 
-// Like karya
-document.getElementById("likeKaryaBtn").addEventListener("click", ()=>{
-  fetch(url,{
-    method:"POST",
-    body:JSON.stringify({action:"likeKarya", idKarya:idKarya})
-  })
-  .then(res=>res.json())
-  .then(res=>{
-    if(res.status=="success"){
-      const current = parseInt(document.getElementById("likeKaryaCount").innerText)||0;
-      document.getElementById("likeKaryaCount").innerText = current+1;
-    } else alert("Gagal menambahkan like karya.");
-  });
-});
-
-// Komentar
+// tampilkan komentar
 function loadKomentar(){
   fetch(url+"?action=getKomentar&id="+idKarya)
   .then(res=>res.json())
   .then(data=>{
     let html="";
     data.forEach(k=>{
-      let likeCount = k[5]||0;
-      const idKomentar = k[6];
       html+=`<div class="komentar-card">
-               <strong>${k[1]}</strong> <small>${new Date(k[3]).toLocaleString()}</small>
-               <p>${k[2]}</p>
-               <button class="like-btn" data-id="${idKomentar}">Like ❤️</button>
-               <span class="like-count">${likeCount}</span>
+                <strong>${k[1]}</strong> <small>${new Date(k[3]).toLocaleString()}</small>
+                <p>${k[2]}</p>
              </div>`;
     });
-    if(!html) html="<p>Belum ada komentar.</p>";
+    if(html=="") html="<p>Belum ada komentar.</p>";
     document.getElementById("komentarContainer").innerHTML=html;
-
-    document.querySelectorAll(".like-btn").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
-        const idKomentar = btn.dataset.id;
-        fetch(url,{
-          method:"POST",
-          body:JSON.stringify({action:"likeKomentar", idKomentar:idKomentar})
-        })
-        .then(res=>res.json())
-        .then(res=>{
-          if(res.status=="success") loadKomentar();
-          else alert("Gagal menambahkan like komentar.");
-        });
-      });
-    });
   });
 }
+
 loadKomentar();
 
-// Tambah komentar
-document.getElementById("kirimKomentar").addEventListener("click", ()=>{
+// kirim komentar
+document.getElementById("kirimKomentar").addEventListener("click",function(){
   const nama = document.getElementById("namaInput").value.trim();
   const komentar = document.getElementById("komentarInput").value.trim();
   if(!nama || !komentar){ alert("Nama dan komentar wajib diisi!"); return; }
 
   fetch(url,{
     method:"POST",
-    body:JSON.stringify({action:"addKomentar", idKarya:idKarya, nama:nama, komentar:komentar})
+    body:JSON.stringify({action:"addKomentar",idKarya:idKarya,nama:nama,komentar:komentar})
   })
   .then(res=>res.json())
   .then(res=>{
@@ -166,7 +127,9 @@ document.getElementById("kirimKomentar").addEventListener("click", ()=>{
       document.getElementById("namaInput").value="";
       document.getElementById("komentarInput").value="";
       loadKomentar();
-    } else alert("Gagal mengirim komentar.");
+    } else {
+      alert("Gagal mengirim komentar.");
+    }
   });
 });
 </script>
