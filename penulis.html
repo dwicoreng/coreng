@@ -2,270 +2,131 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Penulis | CORENG</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
+<title>CORENG - Daftar Penulis</title>
+<link rel="stylesheet" href="style.css">
 <style>
-:root{
-  --dark:#2b1d12;
-  --brown:#4b2e1a;
-  --gold:#d4b06a;
-  --cream:#fbf7f2;
+#penulisContainer{
+  max-width:800px;
+  margin:40px auto;
 }
 
-body{
-  margin:0;
-  font-family:"Georgia", serif;
-  background:
-    repeating-linear-gradient(
-      90deg, rgba(255,255,255,0.03) 0px,
-      rgba(255,255,255,0.03) 2px,
-      rgba(0,0,0,0.04) 4px,
-      rgba(0,0,0,0.04) 6px
-    ),
-    linear-gradient(to bottom,#3a2615,#4a311c,#5a3f26);
-  color:#f3e9d7;
-  min-height:100vh;
-}
-
-/* HEADER */
-header{
-  background:linear-gradient(135deg,#1c1917,#44403c);
-  color:white;
-  padding:30px 20px;
-}
-.header-box{
-  max-width:1100px;
-  margin:auto;
+.penulis-card{
+  background-color:#f4e6cd;
+  color:#3a2518;
+  padding:20px;
+  border-radius:10px;
+  margin-bottom:15px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.3);
   display:flex;
-  justify-content:space-between;
   align-items:center;
-}
-.logo{
-  font-family:'Merriweather',serif;
-  font-size:28px;
-  letter-spacing:2px;
-}
-nav ul{
-  list-style:none;
-  display:flex;
-  gap:25px;
-  margin:0;
-  padding:0;
-}
-nav a{
-  text-decoration:none;
-  color:white;
-  font-size:14px;
-  letter-spacing:1px;
+  justify-content:space-between;
   transition:0.3s;
 }
-nav a:hover{
-  color:var(--gold);
+
+.penulis-card:hover{
+  transform:translateY(-3px);
 }
 
-/* HERO */
-.hero{
-  background:linear-gradient(135deg,#2b1d12,#4b2e1a);
-  position:relative;
-  height:180px;
-}
-.hero::after{
-  content:'';
-  position:absolute;
-  inset:0;
-  background:rgba(43,29,18,0.65);
-}
-.hero-text{
-  position:relative;
-  z-index:2;
-  max-width:900px;
-  margin:auto;
-  height:100%;
+.penulis-info{
   display:flex;
-  flex-direction:column;
-  justify-content:center;
-  color:#fbf7f2;
-  padding:20px;
-}
-.hero-text h1{
-  font-family:'Merriweather',serif;
-  margin:0;
-  font-size:32px;
-}
-.hero-text p{
-  max-width:600px;
-  opacity:0.9;
+  align-items:center;
+  gap:15px;
 }
 
-/* CONTAINER */
-.container{
-  max-width:900px;
-  margin:auto;
-  padding:40px 15px;
+.penulis-info img{
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  object-fit:cover;
 }
 
-/* CARD */
-.card{
-  background:white;
-  border-radius:12px;
-  padding:20px;
-  margin-bottom:20px;
-  border-left:5px solid var(--gold);
-  box-shadow:0 5px 15px rgba(0,0,0,0.08);
-  color:#222;
-}
-.card h3{
+.penulis-info h3{
   margin:0;
-  font-family:'Merriweather',serif;
+  font-size:18px;
 }
-.card small{
+
+.penulis-info h3 a{
+  color:#3a2518;
+  text-decoration:none;
+}
+
+.penulis-info h3 a:hover{
+  text-decoration:underline;
+}
+
+.penulis-info small{
   display:block;
-  margin-top:8px;
-  color:#555;
-}
-
-/* SEARCH */
-#searchInput{
-  width:100%;
-  padding:12px;
-  border-radius:8px;
-  border:none;
-  margin-bottom:25px;
-  font-size:15px;
-}
-
-/* FOOTER */
-footer{
-  background:#1c1917;
-  color:#a8a29e;
-  text-align:center;
-  padding:25px 15px;
-  font-size:14px;
-}
-
-/* MOBILE */
-@media(max-width:768px){
-  .header-box{
-    flex-direction:column;
-    gap:15px;
-  }
-  nav ul{
-    flex-wrap:wrap;
-    justify-content:center;
-  }
-  .hero-text h1{
-    font-size:26px;
-  }
+  font-size:12px;
+  color:#6e4b2e;
 }
 </style>
 </head>
-
 <body>
 
-<!-- HEADER -->
-<header>
-  <div class="header-box">
-    <div class="logo">CORENG</div>
-    <nav>
-      <ul>
-        <li><a href="index.html">Beranda</a></li>
-        <li><a href="puisi.html">Puisi</a></li>
-        <li><a href="cerpen.html">Cerpen</a></li>
-        <li><a href="likhati.html">Likhati</a></li>
-        <li><a href="kirim.html">Kirim Karya</a></li>
-        <li><a href="penulis.html">Penulis</a></li>
-      </ul>
-    </nav>
+<nav>
+  <div class="logo">CORENG</div>
+  <div>
+    <a href="index.html">Beranda</a>
+    <a href="puisi.html">Puisi</a>
+    <a href="cerpen.html">Cerpen</a>
+    <a href="likhati.html">Likhati</a>
+    <a href="kirim.html">Kirim Karya</a>
+    <a href="penulis.html">Penulis</a>
   </div>
-</header>
+</nav>
 
-<!-- HERO -->
 <section class="hero">
-  <div class="hero-text">
-    <h1>Daftar Penulis</h1>
-    <p>CORENG • Lorong Literasi</p>
-  </div>
+  <h1>Daftar Penulis</h1>
+  <p>Lihat semua penulis dan jumlah karya yang telah dikirim</p>
 </section>
 
-<!-- SEARCH -->
-<div class="container">
-  <input type="text" id="searchInput" placeholder="🔍 Cari penulis...">
-</div>
+<div id="penulisContainer"></div>
 
-<!-- CONTENT -->
-<div class="container" id="penulisList">
-  <p>⏳ Memuat penulis...</p>
-</div>
-
-<!-- FOOTER -->
 <footer>
-  © 2026 CORENG • Lorong Literasi Sekolah
+  © 2026 CORENG - Portal Literasi Sekolah
 </footer>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycby_M2P-eeuDh4cNIaeNi-WmfKEKLvsHSmHx5Meva-bysSMtIEElRXP5hUmK1mLC1sBRqw/exec";
+const url = "https://script.google.com/macros/s/AKfycbwAYPlfKkUQk3-uQUC1XUxUQ-3hqDG2qZWuw0vdOc1ZkGpu8BJe0446yNZUBs0yGL9RPw/exec"; // Ganti dengan URL Web App
 
-let allData = [];
-
-/* AMBIL DATA */
-fetch(API_URL)
+fetch(url+"?action=getKarya")
 .then(res => res.json())
 .then(data => {
-
-  const box = document.getElementById("penulisList");
-  allData = data.filter(d =>
-    d.status && d.status.toLowerCase().trim() === "publish"
-  );
-
-  if(allData.length === 0){
-    box.innerHTML = "<p>😔 Belum ada penulis.</p>";
-    return;
-  }
-
-  tampilkanPenulis(allData);
-
-})
-.catch(err => {
-  document.getElementById("penulisList").innerHTML = "<p>❌ Gagal mengambil data.</p>";
-  console.error(err);
-});
-
-/* TAMPILKAN PENULIS */
-function tampilkanPenulis(data){
-  const box = document.getElementById("penulisList");
-  box.innerHTML = "";
-
   // Hitung jumlah karya per penulis
   const penulisMap = {};
   data.forEach(d => {
-    if(d.nama){
-      if(!penulisMap[d.nama]) penulisMap[d.nama] = 0;
-      penulisMap[d.nama]++;
+    const nama = d[2];
+    if(penulisMap[nama]){
+      penulisMap[nama].count += 1;
+      if(!penulisMap[nama].foto && d[9]) penulisMap[nama].foto = d[9];
+    } else {
+      penulisMap[nama] = {count:1, foto:d[9] || 'default.png'};
     }
   });
 
-  // Urutkan alfabetis
-  const penulisSorted = Object.keys(penulisMap).sort();
+  // Ubah ke array dan urutkan alphabet
+  const penulisList = Object.keys(penulisMap).map(nama => ({
+    nama: nama,
+    count: penulisMap[nama].count,
+    foto: penulisMap[nama].foto
+  })).sort((a,b)=>a.nama.localeCompare(b.nama));
 
-  penulisSorted.forEach(nama => {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
-      <h3>${nama}</h3>
-      <small>Jumlah karya: ${penulisMap[nama]}</small>
+  // Tampilkan
+  let html = "";
+  penulisList.forEach(p => {
+    html += `
+      <div class="penulis-card">
+        <div class="penulis-info">
+          <img src="${p.foto}">
+          <div>
+            <h3><a href="penulis-detail.html?nama=${encodeURIComponent(p.nama)}">${p.nama}</a></h3>
+            <small>${p.count} karya</small>
+          </div>
+        </div>
+      </div>
     `;
-    box.appendChild(card);
   });
-}
-
-/* SEARCH PENULIS */
-document.getElementById("searchInput").addEventListener("input", function(){
-  const keyword = this.value.toLowerCase();
-  const hasil = allData.filter(d => d.nama && d.nama.toLowerCase().includes(keyword));
-  tampilkanPenulis(hasil);
+  document.getElementById("penulisContainer").innerHTML = html;
 });
 </script>
 
