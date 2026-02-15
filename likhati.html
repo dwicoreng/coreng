@@ -2,283 +2,89 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Likhati | CORENG</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
-<style>
-
-/* WARNA */
-:root{
-  --dark:#2b1d12;
-  --brown:#4b2e1a;
-  --gold:#d4b06a;
-  --cream:#fbf7f2;
-}
-
-body{
-  margin:0;
-  font-family:Georgia, serif;
-
-  background:
-  repeating-linear-gradient(
-    90deg,
-    rgba(255,255,255,0.03) 0px,
-    rgba(255,255,255,0.03) 2px,
-    rgba(0,0,0,0.04) 4px,
-    rgba(0,0,0,0.04) 6px
-  ),
-  linear-gradient(to bottom,#3a2615,#4a311c,#5a3f26);
-
-  color:#f3e9d7;
-  min-height:100vh;
-}
-
-/* HEADER */
-header{
-  background:linear-gradient(135deg,#1c1917,#44403c);
-  padding:25px 15px;
-  color:white;
-}
-
-.header-box{
-  max-width:1100px;
-  margin:auto;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  flex-wrap:wrap;
-}
-
-.logo{
-  font-family:'Merriweather',serif;
-  font-size:26px;
-}
-
-nav ul{
-  list-style:none;
-  display:flex;
-  gap:20px;
-  padding:0;
-  margin:0;
-}
-
-nav a{
-  color:white;
-  text-decoration:none;
-  font-size:14px;
-}
-
-nav a:hover{
-  color:var(--gold);
-}
-
-/* JUDUL */
-.page-title{
-  text-align:center;
-  padding:35px 15px;
-}
-
-.page-title h1{
-  margin:0;
-  font-family:'Merriweather',serif;
-}
-
-/* CONTAINER */
-.container{
-  max-width:900px;
-  margin:auto;
-  padding:15px;
-}
-
-/* CARD */
-.card{
-  background:white;
-  border-radius:12px;
-  padding:25px;
-  margin-bottom:25px;
-  border-left:5px solid var(--gold);
-  box-shadow:0 4px 12px rgba(0,0,0,0.1);
-  color:#222;
-}
-
-.card h3{
-  margin:0;
-  font-family:'Merriweather',serif;
-}
-
-.card small{
-  display:block;
-  margin:8px 0 15px;
-  color:#666;
-}
-
-/* ISI */
-.isi{
-  line-height:1.9;
-  font-size:16px;
-  max-height:140px;
-  overflow:hidden;
-}
-
-.isi.full{
-  max-height:none;
-}
-
-/* BACA */
-.baca-btn{
-  display:inline-block;
-  margin-top:8px;
-  color:#2563eb;
-  cursor:pointer;
-  font-weight:600;
-  font-size:14px;
-}
-
-/* FOOTER */
-footer{
-  background:#1c1917;
-  text-align:center;
-  padding:20px;
-  font-size:14px;
-  color:#aaa;
-}
-
-</style>
+<title>CORENG - Likhati</title>
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<!-- HEADER -->
-<header>
-<div class="header-box">
-
+<nav>
   <div class="logo">CORENG</div>
+  <div>
+    <a href="index.html">Beranda</a>
+    <a href="puisi.html">Puisi</a>
+    <a href="cerpen.html">Cerpen</a>
+    <a href="likhati.html">Likhati</a>
+    <a href="kirim.html">Kirim Karya</a>
+    <a href="penulis.html">Penulis</a>
+  </div>
+</nav>
 
-  <nav>
-    <ul>
-      <li><a href="index.html">Beranda</a></li>
-      <li><a href="puisi.html">Puisi</a></li>
-      <li><a href="cerpen.html">Cerpen</a></li>
-      <li><a href="likhati.html">Likhati</a></li>
-      <li><a href="kirim.html">Kirim Karya</a></li>
-      <li><a href="penulis.html">Penulis</a></li>
-    </ul>
-  </nav>
-
-</div>
-</header>
-
-<!-- JUDUL -->
-<section class="page-title">
-<h1>Kumpulan Likhati</h1>
-<p>CORENG • Lorong Literasi</p>
+<section class="hero">
+  <h1>Likhati</h1>
+  <p>Mengekspresikan hati lewat kata-kata sederhana</p>
 </section>
 
-<!-- DATA -->
-<div class="container" id="karyaList">
-<p>⏳ Memuat likhati...</p>
+<div class="search-box">
+  <input type="text" id="searchInput" placeholder="🔎 Cari judul, nama, atau isi likhati...">
 </div>
 
-<!-- FOOTER -->
+<div id="karyaContainer"></div>
+
 <footer>
-© 2026 CORENG • Lorong Literasi
+  © 2026 CORENG - Portal Literasi Sekolah
 </footer>
 
-
 <script>
+const url = "https://script.google.com/macros/s/AKfycbwAYPlfKkUQk3-uQUC1XUxUQ-3hqDG2qZWuw0vdOc1ZkGpu8BJe0446yNZUBs0yGL9RPw/exec"; // Ganti dengan URL Web App
+let semuaData = [];
 
-/* API */
-const API_URL =
-"https://script.google.com/macros/s/AKfycby_M2P-eeuDh4cNIaeNi-WmfKEKLvsHSmHx5Meva-bysSMtIEElRXP5hUmK1mLC1sBRqw/exec";
-
-
-/* LOAD */
-fetch(API_URL)
-.then(r => r.json())
+fetch(url + "?action=getKarya")
+.then(res => res.json())
 .then(data => {
-
-  const likhati = data.filter(d =>
-
-    d.jenis &&
-    d.jenis.toLowerCase() === "likhati" &&
-
-    d.status &&
-    d.status.toLowerCase() === "publish"
-
-  );
-
-  tampilkan(likhati);
-
-})
-.catch(err => {
-
-  document.getElementById("karyaList").innerHTML =
-  "<p>❌ Gagal mengambil data</p>";
-
-  console.error(err);
-
+  semuaData = data.filter(d => d[3] === "Likhati").reverse();
+  tampilkan(semuaData);
 });
 
-
-/* TAMPIL */
 function tampilkan(data){
-
-  const box = document.getElementById("karyaList");
-  box.innerHTML = "";
-
-  if(data.length === 0){
-    box.innerHTML = "<p>😔 Belum ada likhati</p>";
-    return;
-  }
-
-  data.slice().reverse().forEach(d => {
-
-    const card = document.createElement("div");
-    card.className="card";
-
-
-    card.innerHTML=`
-
-    <h3>${d.judul}</h3>
-
-    <small>✍️ ${d.nama}</small>
-
-    <div class="isi">
-      ${d.isi.replace(/\n/g,"<br>")}
-    </div>
-
-    <span class="baca-btn">
-      📖 Baca Selengkapnya
-    </span>
-
+  let html = "";
+  data.forEach(d => {
+    html += `
+      <div class="card">
+        <img src="${d[9] ? d[9] : 'default.png'}">
+        <div class="card-content">
+          <h3>${d[4]}</h3>
+          <small>✍ ${d[3]} | ${d[2]}</small>
+          <p>${d[5].substring(0,200)}...</p>
+          <div class="card-footer">
+            <a href="karya.html?id=${d[0]}">📖 Baca Selengkapnya</a>
+            <button class="like-btn" data-id="${d[0]}">❤️ <span>${d[10]?d[10]:0}</span></button>
+          </div>
+        </div>
+      </div>
     `;
-
-    box.appendChild(card);
-
-
-    /* TOGGLE */
-    const btn=card.querySelector(".baca-btn");
-    const isi=card.querySelector(".isi");
-
-    btn.addEventListener("click",()=>{
-
-      if(isi.classList.contains("full")){
-        isi.classList.remove("full");
-        btn.innerText="📖 Baca Selengkapnya";
-      }else{
-        isi.classList.add("full");
-        btn.innerText="🔽 Tutup";
-      }
-
-    });
-
   });
-
+  document.getElementById("karyaContainer").innerHTML = html;
 }
 
+document.getElementById("searchInput").addEventListener("input", function(){
+  const keyword = this.value.toLowerCase();
+  const hasil = semuaData.filter(d =>
+    d[2].toLowerCase().includes(keyword) ||
+    d[4].toLowerCase().includes(keyword) ||
+    d[5].toLowerCase().includes(keyword)
+  );
+  tampilkan(hasil);
+});
+
+document.getElementById("karyaContainer").addEventListener("click", function(e){
+  if(e.target.classList.contains("like-btn") || e.target.parentElement.classList.contains("like-btn")){
+    let btn = e.target.classList.contains("like-btn") ? e.target : e.target.parentElement;
+    let idKarya = btn.getAttribute("data-id");
+    fetch(url,{method:"POST",body:JSON.stringify({action:"addLike",idKarya:idKarya})})
+      .then(res=>res.json())
+      .then(res=>{if(res.status=="success") btn.querySelector("span").innerText=res.likes;});
+  }
+});
 </script>
 
 </body>
