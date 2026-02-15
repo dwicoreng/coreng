@@ -4,10 +4,42 @@
 <meta charset="UTF-8">
 <title>CORENG - Baca Karya</title>
 <link rel="stylesheet" href="style.css">
+<style>
+#komentarSection {
+  max-width: 700px;
+  margin: 40px auto;
+}
+
+#komentarContainer .komentar-card {
+  background-color: #f4e6cd;
+  color: #3a2518;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+#komentarSection input, #komentarSection textarea, #komentarSection button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+#komentarSection button {
+  background-color: #2c3e50;
+  color: white;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+#komentarSection button:hover {
+  background-color: #34495e;
+}
+</style>
 </head>
 <body>
 
-<!-- NAVBAR -->
 <nav>
   <div class="logo">CORENG</div>
   <div>
@@ -20,14 +52,12 @@
   </div>
 </nav>
 
-<!-- KARYA -->
-<section id="karyaDetail">
+<section id="karyaDetail" style="max-width:700px;margin:40px auto;">
   <h1 id="judul"></h1>
   <small id="meta"></small>
   <p id="isi"></p>
 </section>
 
-<!-- KOMENTAR -->
 <section id="komentarSection">
   <h2>Komentar</h2>
   <div id="komentarContainer"></div>
@@ -43,70 +73,60 @@
 </footer>
 
 <script>
-const url = "https://script.google.com/macros/s/AKfycbwAYPlfKkUQk3-uQUC1XUxUQ-3hqDG2qZWuw0vdOc1ZkGpu8BJe0446yNZUBs0yGL9RPw/exec"; // GANTI dengan URL Web App
+const url = "https://script.google.com/macros/s/AKfycbwAYPlfKkUQk3-uQUC1XUxUQ-3hqDG2qZWuw0vdOc1ZkGpu8BJe0446yNZUBs0yGL9RPw/exec"; // GANTI
 
-// Ambil ID karya dari query string
 const params = new URLSearchParams(window.location.search);
 const idKarya = params.get("id");
 
-// Tampilkan karya
-fetch(url + "?action=getKarya")
-.then(res => res.json())
-.then(data => {
-  const karya = data.find(d => d[0] == idKarya);
+// tampilkan karya
+fetch(url+"?action=getKarya")
+.then(res=>res.json())
+.then(data=>{
+  const karya = data.find(d=>d[0]==idKarya);
   if(karya){
-    document.getElementById("judul").innerText = karya[4];
-    document.getElementById("meta").innerText = `✍ ${karya[3]} | ${karya[1]}`;
-    document.getElementById("isi").innerText = karya[5];
+    document.getElementById("judul").innerText=karya[4];
+    document.getElementById("meta").innerText=`✍ ${karya[3]} | ${karya[2]}`;
+    document.getElementById("isi").innerText=karya[5];
   } else {
-    document.getElementById("karyaDetail").innerHTML = "<p>Karya tidak ditemukan.</p>";
+    document.getElementById("karyaDetail").innerHTML="<p>Karya tidak ditemukan.</p>";
   }
 });
 
-// Tampilkan komentar
+// tampilkan komentar
 function loadKomentar(){
-  fetch(url + "?action=getKomentar&id=" + idKarya)
-  .then(res => res.json())
-  .then(data => {
-    let html = "";
-    data.forEach(k => {
-      html += `<div class="komentar-card">
+  fetch(url+"?action=getKomentar&id="+idKarya)
+  .then(res=>res.json())
+  .then(data=>{
+    let html="";
+    data.forEach(k=>{
+      html+=`<div class="komentar-card">
                 <strong>${k[1]}</strong> <small>${new Date(k[3]).toLocaleString()}</small>
                 <p>${k[2]}</p>
-              </div>`;
+             </div>`;
     });
-    if(html=="") html = "<p>Belum ada komentar.</p>";
-    document.getElementById("komentarContainer").innerHTML = html;
+    if(html=="") html="<p>Belum ada komentar.</p>";
+    document.getElementById("komentarContainer").innerHTML=html;
   });
 }
 
 loadKomentar();
 
-// Kirim komentar baru
-document.getElementById("kirimKomentar").addEventListener("click", function(){
+// kirim komentar
+document.getElementById("kirimKomentar").addEventListener("click",function(){
   const nama = document.getElementById("namaInput").value.trim();
   const komentar = document.getElementById("komentarInput").value.trim();
+  if(!nama || !komentar){ alert("Nama dan komentar wajib diisi!"); return; }
 
-  if(nama=="" || komentar==""){
-    alert("Nama dan komentar harus diisi!");
-    return;
-  }
-
-  fetch(url, {
-    method: "POST",
-    body: JSON.stringify({
-      action: "addKomentar",
-      idKarya: idKarya,
-      nama: nama,
-      komentar: komentar
-    })
+  fetch(url,{
+    method:"POST",
+    body:JSON.stringify({action:"addKomentar",idKarya:idKarya,nama:nama,komentar:komentar})
   })
-  .then(res => res.json())
-  .then(res => {
+  .then(res=>res.json())
+  .then(res=>{
     if(res.status=="success"){
-      document.getElementById("namaInput").value = "";
-      document.getElementById("komentarInput").value = "";
-      loadKomentar(); // refresh komentar
+      document.getElementById("namaInput").value="";
+      document.getElementById("komentarInput").value="";
+      loadKomentar();
     } else {
       alert("Gagal mengirim komentar.");
     }
