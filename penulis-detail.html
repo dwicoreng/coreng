@@ -2,14 +2,17 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>CORENG - Karya Penulis</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CORENG - Penulis</title>
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style-mobile.css">
 </head>
 <body>
 
 <nav>
   <div class="logo">CORENG</div>
-  <div>
+  <div id="menuToggle">&#9776;</div>
+  <div class="menu">
     <a href="index.html">Beranda</a>
     <a href="puisi.html">Puisi</a>
     <a href="cerpen.html">Cerpen</a>
@@ -19,63 +22,31 @@
   </div>
 </nav>
 
-<section class="hero">
-  <h1 id="judulHalaman">Karya Penulis</h1>
-  <p id="subJudul">Menampilkan karya penulis terpilih</p>
-</section>
+<section id="penulisKarya"></section>
 
-<div id="karyaContainer"></div>
-
-<footer>
-  © 2026 CORENG - Portal Literasi Sekolah
-</footer>
+<footer>© 2026 CORENG - Portal Literasi Sekolah</footer>
 
 <script>
-const url = "https://script.google.com/macros/s/AKfycbwAYPlfKkUQk3-uQUC1XUxUQ-3hqDG2qZWuw0vdOc1ZkGpu8BJe0446yNZUBs0yGL9RPw/exec"; // Ganti dengan URL Web App
+const url = "https://script.google.com/macros/s/AKfycbwAYPlfKkUQk3-uQUC1XUxUQ-3hqDG2qZWuw0vdOc1ZkGpu8BJe0446yNZUBs0yGL9RPw/exec";
 const params = new URLSearchParams(window.location.search);
-const namaPenulis = params.get("nama");
+const namaPenulis = params.get("nama")||"";
 
-document.getElementById("judulHalaman").innerText = `Karya Penulis: ${namaPenulis}`;
+const menuToggle = document.getElementById("menuToggle");
+const menu = document.querySelector("nav .menu");
+menuToggle.addEventListener("click", ()=> menu.classList.toggle("show"));
 
-fetch(url + "?action=getKarya")
-.then(res => res.json())
-.then(data => {
-  const karyaPenulis = data.filter(d => d[2] === namaPenulis).reverse();
-
-  let html = "";
-  if(karyaPenulis.length === 0){
-    html = "<p>Belum ada karya.</p>";
-  } else {
-    karyaPenulis.forEach(d => {
-      html += `
-        <div class="card">
-          <img src="${d[9] ? d[9] : 'default.png'}">
-          <div class="card-content">
-            <h3>${d[4]}</h3>
-            <small>✍ ${d[3]} | ${d[2]}</small>
-            <p>${d[5].substring(0,200)}...</p>
-            <div class="card-footer">
-              <a href="karya.html?id=${d[0]}">📖 Baca Selengkapnya</a>
-              <button class="like-btn" data-id="${d[0]}">❤️ <span>${d[10]?d[10]:0}</span></button>
-            </div>
-          </div>
-        </div>
-      `;
-    });
-  }
-
-  document.getElementById("karyaContainer").innerHTML = html;
-});
-
-// LIKE
-document.getElementById("karyaContainer").addEventListener("click", function(e){
-  if(e.target.classList.contains("like-btn") || e.target.parentElement.classList.contains("like-btn")){
-    let btn = e.target.classList.contains("like-btn") ? e.target : e.target.parentElement;
-    let idKarya = btn.getAttribute("data-id");
-    fetch(url,{method:"POST",body:JSON.stringify({action:"addLike",idKarya:idKarya})})
-      .then(res=>res.json())
-      .then(res=>{if(res.status=="success") btn.querySelector("span").innerText=res.likes;});
-  }
+fetch(url+"?action=getKarya")
+.then(res=>res.json())
+.then(data=>{
+  const karyaPenulis = data.filter(k=>k[2]===namaPenulis && k[7]!="hapus");
+  let html=`<h2>Karya oleh ${namaPenulis}</h2>`;
+  karyaPenulis.forEach(k=>{
+    html+=`<div class="karya-card" onclick="location='karya.html?id=${k[0]}'">
+             <h3>${k[4]}</h3>
+           </div>`;
+  });
+  if(!karyaPenulis.length) html+="<p>Tidak ada karya.</p>";
+  document.getElementById("penulisKarya").innerHTML=html;
 });
 </script>
 
