@@ -2,223 +2,136 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CORENG | Lorong Literasi</title>
-
+<title>CORENG - Lorong Literasi</title>
+<link rel="stylesheet" href="style.css">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:wght@400;500&display=swap');
-
-body {
-  margin: 0;
-  font-family: 'Cormorant Garamond', serif;
-  background-color: #2b1d14;
-  background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-  color: #f5e6cc;
-  line-height: 1.8;
+/* Tambahan styling untuk thumbnail dan like */
+.card {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin: 10px;
+  border-radius: 8px;
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
 }
 
-/* NAVBAR */
-nav {
-  background: linear-gradient(to right, #1f140d, #3a2518);
-  padding: 18px 60px;
+.card img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.card-content {
+  flex: 1;
+}
+
+.card-content h3 {
+  margin: 0;
+}
+
+.card-content small {
+  color: #555;
+}
+
+.card-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 5px;
 }
 
-nav .logo {
-  font-family: 'Playfair Display', serif;
-  font-size: 28px;
-  letter-spacing: 2px;
-  color: #f0d8a8;
-}
-
-/* HERO */
-.hero {
-  padding: 100px 80px 40px 80px;
-  max-width: 900px;
-}
-
-.hero h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 52px;
-  margin-bottom: 10px;
-  color: #f8e7c5;
-}
-
-.hero p {
-  font-size: 20px;
-  font-style: italic;
-  opacity: 0.85;
-  color: #d6b98c;
-}
-
-/* SEARCH */
-.search-box {
-  margin: 40px 80px;
-}
-
-.search-box input {
-  width: 100%;
-  padding: 15px 20px;
-  border-radius: 8px;
-  border: none;
-  font-size: 16px;
-  background-color: #f3e3c9;
-  color: #3b2a1d;
-}
-
-/* CARD */
-.card {
-  background-color: #f4e6cd;
-  color: #3a2518;
-  margin: 30px 80px;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-  transition: 0.3s;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-}
-
-.card h3 {
-  font-family: 'Playfair Display', serif;
-  font-size: 26px;
-  margin-bottom: 10px;
-}
-
-.card small {
-  color: #6e4b2e;
-}
-
-.card p {
-  margin-top: 15px;
-}
-
-/* LIKE */
-.like-section {
-  margin-top: 15px;
-}
-
-.like-btn {
-  background-color: #8b5e34;
-  border: none;
-  color: white;
-  padding: 6px 12px;
-  cursor: pointer;
-  border-radius: 5px;
-  margin-left: 10px;
-}
-
-.like-btn:hover {
-  background-color: #6e4b2e;
-}
-
-.card a {
-  display: inline-block;
-  margin-top: 15px;
-  color: #8b5e34;
-  text-decoration: none;
+.like {
+  color: #e74c3c;
   font-weight: bold;
-}
-
-.card a:hover {
-  text-decoration: underline;
-}
-
-footer {
-  text-align: center;
-  padding: 40px;
-  background-color: #1f140d;
-  font-size: 14px;
-  color: #cbb38a;
 }
 </style>
 </head>
 
 <body>
 
+<!-- NAVBAR -->
 <nav>
   <div class="logo">CORENG</div>
+  <div>
+    <a href="index.html">Beranda</a>
+    <a href="puisi.html">Puisi</a>
+    <a href="cerpen.html">Cerpen</a>
+    <a href="likhati.html">Likhati</a>
+    <a href="kirim.html">Kirim Karya</a>
+    <a href="penulis.html">Penulis</a>
+  </div>
 </nav>
 
+<!-- HERO -->
 <section class="hero">
   <h1>Lorong Literasi</h1>
   <p>Menggores batu-batu dengan kata dan doa sederhana</p>
 </section>
 
+<!-- SEARCH -->
 <div class="search-box">
-  <input type="text" id="search" placeholder="Cari judul, nama, atau isi karya...">
+  <input type="text" id="searchInput" placeholder="🔎 Cari judul, nama, jenis, atau isi karya...">
 </div>
 
-<div id="karya"></div>
+<!-- CONTAINER KARYA -->
+<div id="karyaContainer"></div>
 
 <footer>
-  © 2026 CORENG — Lorong Literasi
+  © 2026 CORENG - Portal Literasi Sekolah
 </footer>
 
 <script>
-const url = "https://script.google.com/macros/s/AKfycbx75opexEOcvIiSVSBc5KE0eYf7wtCBmjIfU1bHhssUpUVZE22rRWVg5vtz2ClTnNnN0w/exec";
+const url = "https://script.google.com/macros/s/AKfycbwAYPlfKkUQk3-uQUC1XUxUQ-3hqDG2qZWuw0vdOc1ZkGpu8BJe0446yNZUBs0yGL9RPw/exec"; // GANTI dengan URL Web App
 
+let semuaData = [];
+
+// Ambil data karya
 fetch(url + "?action=getKarya")
 .then(res => res.json())
 .then(data => {
-
-  let semuaData = data;
-
-  function tampilkan(filter="") {
-    let html = "";
-
-    semuaData.forEach(k => {
-
-      if (k[7] == "Tampil") {
-
-        if (
-          k[4].toLowerCase().includes(filter) ||
-          k[2].toLowerCase().includes(filter) ||
-          k[5].toLowerCase().includes(filter)
-        ) {
-
-          html += `
-            <div class="card">
-              <h3>${k[4]}</h3>
-              <small>${k[2]} | ${k[3]}</small>
-              <p>${k[5].substring(0, 200)}...</p>
-
-              <div class="like-section">
-                ❤️ <span id="like-${k[0]}">${k[10] || 0}</span>
-                <button class="like-btn" onclick="like('${k[0]}')">Suka</button>
-              </div>
-
-              <a href="karya.html?id=${k[0]}">Baca Selengkapnya</a>
-            </div>
-          `;
-        }
-      }
-
-    });
-
-    document.getElementById("karya").innerHTML = html;
-  }
-
-  tampilkan();
-
-  document.getElementById("search").addEventListener("keyup", function() {
-    tampilkan(this.value.toLowerCase());
-  });
-
+  semuaData = data.reverse(); // terbaru dulu
+  tampilkan(semuaData);
 });
 
-/* LIKE FUNCTION */
-function like(id){
-  fetch(url + "?action=like&id=" + id)
-  .then(() => {
-    let el = document.getElementById("like-" + id);
-    el.innerText = parseInt(el.innerText) + 1;
+function tampilkan(data){
+  let html = "";
+
+  data.forEach(d => {
+    // d[9] = Foto Profil, d[10] = Like
+    html += `
+      <div class="card">
+        <img src="${d[9] ? d[9] : 'default.png'}" alt="Profil">
+        <div class="card-content">
+          <h3>${d[4]}</h3>
+          <small>✍ ${d[3]} | ${d[1]}</small>
+          <p>${d[5].substring(0,200)}...</p>
+          <div class="card-footer">
+            <a href="karya.html?id=${d[0]}">📖 Baca Selengkapnya</a>
+            <span class="like">❤️ ${d[10] ? d[10] : 0}</span>
+          </div>
+        </div>
+      </div>
+    `;
   });
+
+  document.getElementById("karyaContainer").innerHTML = html;
 }
+
+// SEARCH
+document.getElementById("searchInput").addEventListener("input", function(){
+  const keyword = this.value.toLowerCase();
+
+  const hasil = semuaData.filter(d =>
+    d[2].toLowerCase().includes(keyword) || // Nama
+    d[3].toLowerCase().includes(keyword) || // Jenis
+    d[4].toLowerCase().includes(keyword) || // Judul
+    d[5].toLowerCase().includes(keyword)    // Isi
+  );
+
+  tampilkan(hasil);
+});
 </script>
 
 </body>
