@@ -2,183 +2,116 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Detail Karya | CORENG</title>
-
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:wght@400;500&display=swap');
-
-body {
-  margin: 0;
-  font-family: 'Cormorant Garamond', serif;
-  background-color: #2b1d14;
-  background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-  color: #3a2518;
-}
-
-/* NAVBAR */
-nav {
-  background: linear-gradient(to right, #1f140d, #3a2518);
-  padding: 18px 60px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-nav .logo {
-  font-family: 'Playfair Display', serif;
-  font-size: 26px;
-  color: #f0d8a8;
-}
-
-nav a {
-  color: #e6cba8;
-  text-decoration: none;
-}
-
-/* HALAMAN KARYA */
-.container {
-  background-color: #f4e6cd;
-  max-width: 900px;
-  margin: 60px auto;
-  padding: 60px;
-  border-radius: 10px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-}
-
-h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 38px;
-  margin-bottom: 10px;
-}
-
-.meta {
-  font-size: 18px;
-  margin-bottom: 30px;
-  color: #6e4b2e;
-}
-
-.isi {
-  font-size: 20px;
-  line-height: 2;
-  white-space: pre-line;
-}
-
-/* KOMENTAR */
-.komentar-section {
-  margin-top: 60px;
-}
-
-.komentar {
-  margin-bottom: 15px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #d6b98c;
-}
-
-.komentar b {
-  color: #5a3b24;
-}
-
-textarea, input {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  font-family: inherit;
-  border-radius: 5px;
-  border: 1px solid #caa86b;
-}
-
-button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  background-color: #8b5e34;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #6e4b2e;
-}
-</style>
+<title>CORENG - Baca Karya</title>
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
+<!-- NAVBAR -->
 <nav>
   <div class="logo">CORENG</div>
-  <a href="index.html">← Kembali</a>
+  <div>
+    <a href="index.html">Beranda</a>
+    <a href="puisi.html">Puisi</a>
+    <a href="cerpen.html">Cerpen</a>
+    <a href="likhati.html">Likhati</a>
+    <a href="kirim.html">Kirim Karya</a>
+    <a href="penulis.html">Penulis</a>
+  </div>
 </nav>
 
-<div class="container">
+<!-- KARYA -->
+<section id="karyaDetail">
+  <h1 id="judul"></h1>
+  <small id="meta"></small>
+  <p id="isi"></p>
+</section>
 
-  <div id="detail"></div>
+<!-- KOMENTAR -->
+<section id="komentarSection">
+  <h2>Komentar</h2>
+  <div id="komentarContainer"></div>
 
-  <div class="komentar-section">
-    <h2>Komentar</h2>
-    <div id="komentar"></div>
+  <h3>Tambah Komentar</h3>
+  <input type="text" id="namaInput" placeholder="Nama">
+  <textarea id="komentarInput" placeholder="Tulis komentar..."></textarea>
+  <button id="kirimKomentar">Kirim</button>
+</section>
 
-    <h3>Tulis Komentar</h3>
-    <input type="text" id="nama" placeholder="Nama Anda">
-    <textarea id="isiKomentar" rows="4" placeholder="Tulis sesuatu..."></textarea>
-    <button onclick="kirimKomentar()">Kirim</button>
-  </div>
-
-</div>
+<footer>
+  © 2026 CORENG - Portal Literasi Sekolah
+</footer>
 
 <script>
-const url = "LINK_WEBAPP_ANDA";
-const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
+const url = "https://script.google.com/macros/s/AKfycbwAYPlfKkUQk3-uQUC1XUxUQ-3hqDG2qZWuw0vdOc1ZkGpu8BJe0446yNZUBs0yGL9RPw/exec"; // GANTI dengan URL Web App
 
-/* LOAD DETAIL */
+// Ambil ID karya dari query string
+const params = new URLSearchParams(window.location.search);
+const idKarya = params.get("id");
+
+// Tampilkan karya
 fetch(url + "?action=getKarya")
 .then(res => res.json())
 .then(data => {
-  const karya = data.find(k => k[0] == id);
-
-  document.getElementById("detail").innerHTML = `
-    <h1>${karya[4]}</h1>
-    <div class="meta">${karya[2]} | ${karya[3]}</div>
-    <div class="isi">${karya[5]}</div>
-  `;
+  const karya = data.find(d => d[0] == idKarya);
+  if(karya){
+    document.getElementById("judul").innerText = karya[4];
+    document.getElementById("meta").innerText = `✍ ${karya[3]} | ${karya[1]}`;
+    document.getElementById("isi").innerText = karya[5];
+  } else {
+    document.getElementById("karyaDetail").innerHTML = "<p>Karya tidak ditemukan.</p>";
+  }
 });
 
-/* LOAD KOMENTAR */
+// Tampilkan komentar
 function loadKomentar(){
-  fetch(url + "?action=getKomentar&id=" + id)
+  fetch(url + "?action=getKomentar&id=" + idKarya)
   .then(res => res.json())
   .then(data => {
     let html = "";
     data.forEach(k => {
-      html += `
-        <div class="komentar">
-          <b>${k[1]}</b><br>
-          ${k[2]}
-        </div>
-      `;
+      html += `<div class="komentar-card">
+                <strong>${k[1]}</strong> <small>${new Date(k[3]).toLocaleString()}</small>
+                <p>${k[2]}</p>
+              </div>`;
     });
-    document.getElementById("komentar").innerHTML = html;
+    if(html=="") html = "<p>Belum ada komentar.</p>";
+    document.getElementById("komentarContainer").innerHTML = html;
   });
 }
 
 loadKomentar();
 
-/* KIRIM KOMENTAR */
-function kirimKomentar(){
+// Kirim komentar baru
+document.getElementById("kirimKomentar").addEventListener("click", function(){
+  const nama = document.getElementById("namaInput").value.trim();
+  const komentar = document.getElementById("komentarInput").value.trim();
+
+  if(nama=="" || komentar==""){
+    alert("Nama dan komentar harus diisi!");
+    return;
+  }
+
   fetch(url, {
     method: "POST",
     body: JSON.stringify({
-      id: id,
-      nama: document.getElementById("nama").value,
-      komentar: document.getElementById("isiKomentar").value
+      action: "addKomentar",
+      idKarya: idKarya,
+      nama: nama,
+      komentar: komentar
     })
-  }).then(() => {
-    document.getElementById("nama").value = "";
-    document.getElementById("isiKomentar").value = "";
-    loadKomentar();
+  })
+  .then(res => res.json())
+  .then(res => {
+    if(res.status=="success"){
+      document.getElementById("namaInput").value = "";
+      document.getElementById("komentarInput").value = "";
+      loadKomentar(); // refresh komentar
+    } else {
+      alert("Gagal mengirim komentar.");
+    }
   });
-}
+});
 </script>
 
 </body>
