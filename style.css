@@ -558,3 +558,27 @@ footer {
   }
 
 }
+/* ===== PERBESAR ISI PUISI / CERPEN / LIKHATI DI HP ===== */
+@media screen and (max-width: 600px) {
+
+  /* Area isi karya */
+  #karyaDetail,
+  .isi-karya,
+  .konten-karya,
+  .content,
+  article,
+  .card-content p {
+
+    font-size: 21px;
+    line-height: 2;
+  }
+
+  /* Judul karya */
+  #karyaDetail h1,
+  #karyaDetail h2,
+  article h1,
+  article h2 {
+    font-size: 28px;
+  }
+
+}
