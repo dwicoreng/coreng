@@ -443,3 +443,35 @@ footer {
     box-shadow: 0 3px 10px rgba(0,0,0,0.4);
   }
 }
+/* ===== PERBESAR FONT KHUSUS HP ===== */
+@media screen and (max-width: 600px) {
+
+  body {
+    font-size: 18px;
+  }
+
+  .hero h1 {
+    font-size: 36px;
+  }
+
+  .hero p {
+    font-size: 18px;
+  }
+
+  .card-content h3 {
+    font-size: 22px;
+  }
+
+  .card-content p {
+    font-size: 17px;
+  }
+
+  nav a {
+    font-size: 16px;
+  }
+
+  .search-box input {
+    font-size: 16px;
+  }
+
+}
