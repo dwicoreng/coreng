@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CORENG - Daftar Penulis</title>
+<link rel="stylesheet" href="style.css">
+<style>
+#penulisContainer{
+  max-width:800px;
+  margin:40px auto;
+}
+
+.penulis-card{
+  background-color:#f4e6cd;
+  color:#3a2518;
+  padding:20px;
+  border-radius:10px;
+  margin-bottom:15px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.3);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  transition:0.3s;
+}
+
+.penulis-card:hover{
+  transform:translateY(-3px);
+}
+
+.penulis-info{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.penulis-info img{
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  object-fit:cover;
+}
+
+.penulis-info h3{
+  margin:0;
+  font-size:18px;
+}
+
+.penulis-info h3 a{
+  color:#3a2518;
+  text-decoration:none;
+}
+
+.penulis-info h3 a:hover{
+  text-decoration:underline;
+}
+
+.penulis-info small{
+  display:block;
+  font-size:12px;
+  color:#6e4b2e;
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">CORENG</div>
+  <div>
+    <a href="index.html">Beranda</a>
+    <a href="puisi.html">Puisi</a>
+    <a href="cerpen.html">Cerpen</a>
+    <a href="likhati.html">Likhati</a>
+    <a href="kirim.html">Kirim Karya</a>
+    <a href="penulis.html">Penulis</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <h1>Daftar Penulis</h1>
+  <p>Lihat semua penulis dan jumlah karya yang telah dikirim</p>
+</section>
+
+<div id="penulisContainer"></div>
+
+<footer>
+  © 2026 CORENG - Portal Literasi Sekolah
+</footer>
+
+<script>
+const url = "https://script.google.com/macros/s/AKfycbwAYPlfKkUQk3-uQUC1XUxUQ-3hqDG2qZWuw0vdOc1ZkGpu8BJe0446yNZUBs0yGL9RPw/exec"; // Ganti dengan URL Web App
+
+fetch(url+"?action=getKarya")
+.then(res => res.json())
+.then(data => {
+  // Hitung jumlah karya per penulis
+  const penulisMap = {};
+  data.forEach(d => {
+    const nama = d[2];
+    if(penulisMap[nama]){
+      penulisMap[nama].count += 1;
+      if(!penulisMap[nama].foto && d[9]) penulisMap[nama].foto = d[9];
+    } else {
+      penulisMap[nama] = {count:1, foto:d[9] || 'default.png'};
+    }
+  });
+
+  // Ubah ke array dan urutkan alphabet
+  const penulisList = Object.keys(penulisMap).map(nama => ({
+    nama: nama,
+    count: penulisMap[nama].count,
+    foto: penulisMap[nama].foto
+  })).sort((a,b)=>a.nama.localeCompare(b.nama));
+
+  // Tampilkan
+  let html = "";
+  penulisList.forEach(p => {
+    html += `
+      <div class="penulis-card">
+        <div class="penulis-info">
+          <img src="${p.foto}">
+          <div>
+            <h3><a href="penulis-detail.html?nama=${encodeURIComponent(p.nama)}">${p.nama}</a></h3>
+            <small>${p.count} karya</small>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+  document.getElementById("penulisContainer").innerHTML = html;
+});
+</script>
+
+</body>
+</html>
